@@ -1,6 +1,6 @@
 import React from "react";
 import InfoCard from "./InfoCard";
-import EducationCard from "./EducationcardFixed";
+import EducationCard from "./EducationCardFixed";
 import { EmployeeData } from "../../../../../shared/types/employeeTypes";
 import { useUpdateEmployee } from "../../../services/mutations/employeeMutations";
 // const education = [
