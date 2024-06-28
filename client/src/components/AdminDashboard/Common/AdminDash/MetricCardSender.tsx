@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Row, Col, Flex, Button, Card, Modal } from "antd";
+import {
+  Row,
+  Col,
+  Flex,
+  Button,
+  Card,
+  Modal,
+  Typography,
+  Skeleton,
+} from "antd";
 import { MetricCard } from "../MetricCard"; // Ensure you have MetricCard component defined somewhere
 import {
   useEmployees,
@@ -10,6 +19,9 @@ import { PlusOutlined } from "@ant-design/icons";
 import CalendarImage from "../../../../assets/CalendarImage.jpg";
 import AttendanceGraph from "../AttendanceGraph";
 import CalendarComponent from "../../../Calendar/Calendar";
+import "../../../../styles/Adminside/parentCardWrapper.css";
+
+const { Title, Text } = Typography;
 
 const calculateMetrics = (data: EmployeeData[]) => {
   const today = new Date().toISOString().split("T")[0];
@@ -71,10 +83,13 @@ const EmployeeMetrics = () => {
   };
 
   return (
-    <Flex style={{ display: "flex", justifyContent: "start" }}>
+    <Flex
+      style={{ display: "flex", justifyContent: "start" }}
+      align="flex-start"
+    >
       <Flex vertical style={{ display: "flex", justifyContent: "start" }}>
         <Flex vertical={false}>
-          <div style={{ marginRight: "15px", }}>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
               title="Total Employees"
               value={metrics.totalEmployees.toString()}
@@ -82,7 +97,7 @@ const EmployeeMetrics = () => {
               color="1"
             />
           </div>
-          <div style={{ marginRight: "15px" }}>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
               title="Present"
               value={metrics.presentEmployees.toString()}
@@ -90,7 +105,7 @@ const EmployeeMetrics = () => {
               color="2"
             />
           </div>
-          <div style={{ marginRight: "15px" }}>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
               title="On Leave"
               value={metrics.employeesOnLeave.toString()}
@@ -98,7 +113,7 @@ const EmployeeMetrics = () => {
               color="3"
             />
           </div>
-          <div style={{ marginRight: "15px" }}>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
               title="Absent"
               value={metrics.absentEmployees.toString()}
@@ -117,7 +132,55 @@ const EmployeeMetrics = () => {
           <AttendanceGraph />
         </div>
       </Flex>
-      <Card
+
+      <div>
+        <Flex>
+          <Title level={5} style={{ marginTop: 0 }}>
+            Recent Activity
+          </Title>
+          {/* three dot icon from antd */}
+        </Flex>
+        <Flex vertical gap={10}>
+          <div className="recentCard">
+            <Text style={{ fontWeight: 700 }}>5 new </Text>
+            <Text style={{ color: "grey" }}>
+              employees registered this week.
+            </Text>
+          </div>
+          <div className="recentCard">
+            <Text style={{ fontWeight: 700 }}>5 new </Text>
+            <Text style={{ color: "grey" }}>
+              employees registered this week.
+            </Text>
+          </div>
+          <div className="recentCard">
+            <Text style={{ fontWeight: 700 }}>5 new </Text>
+            <Text style={{ color: "grey" }}>
+              employees registered this week.
+            </Text>
+          </div>
+          <div className="recentCard">
+            <Text style={{ fontWeight: 700 }}>8 people </Text>
+            <Text style={{ color: "grey" }}>
+              are Abesent this week.
+            </Text>
+          </div>
+          <div className="recentCard">
+            <Text style={{ fontWeight: 700 }}>8 people </Text>
+            <Text style={{ color: "grey" }}>
+              are Abesent this week.
+            </Text>
+          </div>
+          <div className="recentCard">
+            <Text style={{ fontWeight: 700 }}>8 people </Text>
+            <Text style={{ color: "grey" }}>
+              are Abesent this week.
+            </Text>
+          </div>
+        </Flex>
+      </div>
+      {/* <Title>Recnet ACtivity</Title> */}
+      {/* <Card
         style={{
           width: 300,
           textAlign: "center",
@@ -151,7 +214,7 @@ const EmployeeMetrics = () => {
         width={1000}
       >
         <CalendarComponent />
-      </Modal>
+      </Modal> */}
     </Flex>
   );
 };

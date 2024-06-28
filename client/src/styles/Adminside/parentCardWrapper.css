@@ -1,0 +1,44 @@
+
+
+.recentCard {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    min-width: 200px;
+
+    position: relative;
+    /* transition: all 0.3s ease; */
+    /* margin-bottom: 20px; */
+    overflow: hidden;
+    cursor: pointer;
+    /* border: #ff647c solid 2px; */
+    border-left-style: solid;
+    border-left-color: #0489d6;
+    border-left-width: 2px;
+}
+
+
+
+
+
+
+
+
+.parentCardWrapper:nth-child(1) .wrapCard:before {
+    background: linear-gradient(81.67deg, #0084f4 0%, #1a4da2 100%);
+}
+
+.parentCardWrapper:nth-child(1) .wrapCard:after {
+    background: linear-gradient(81.67deg, #0084f4 0%, #1a4da2 100%);
+    
+}
+.parentCardWrapper:nth-child(2) .wrapCard:after {
+    background: linear-gradient(82.59deg, #00c48c 0%, #00a173 100%);
+}
+.parentCardWrapper:nth-child(3) .wrapCard::after {
+    background: linear-gradient(69.83deg, #0084f4 0%, #00c48c 100%);
+}
+.parentCardWrapper:nth-child(4) .wrapCard::after {
+    background: linear-gradient(81.67deg, #ff647c 0%, #1f5dc5 100%);
+}

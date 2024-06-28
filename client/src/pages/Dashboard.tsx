@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Layout } from "antd";
+import { Button, Layout } from "antd";
 import Header from "../components/Common/Header";
 import Sider from "../components/Common/Sider";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Navigate, Route, Routes } from "react-router-dom";
 import EmployeeProfilePage from "./EmployeeProfile/EmployeeProfilePage";
 import EmployeeRegistrationPage from "./EmployeeRegistration/EmployeeRegistrationPage";
@@ -57,7 +58,7 @@ const { Content } = Layout;
 
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const {user}=useAuth()
+  const { user } = useAuth();
   const handleSiderCollapse = (isCollapsed: boolean) => {
     setCollapsed(isCollapsed);
   };
@@ -68,7 +69,20 @@ const Dashboard: React.FC = () => {
         <Header />
       </div>
       <Layout style={{ marginTop: "70px" }}>
-        <Sider onCollapse={handleSiderCollapse} />
+        <div style={{ display: "flex" }}>
+          <Sider collapsed={collapsed} />
+          <Button
+            style={{
+              position: "absolute",
+              top: "70px",
+              left: collapsed ? "80px" : "240px",
+            }}
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+          />
+        </div>
+
         <Layout
           style={{
             marginLeft: collapsed ? "80px" : "240px",
@@ -421,7 +435,8 @@ const Dashboard: React.FC = () => {
               <Route
                 path="/reward"
                 element={
-                  <ProtectedRoute roles={["hrmanager"]}><RewardsList />
+                  <ProtectedRoute roles={["hrmanager"]}>
+                    <RewardsList />
                   </ProtectedRoute>
                 }
               ></Route>

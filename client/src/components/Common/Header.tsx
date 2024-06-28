@@ -30,6 +30,8 @@ import { useEmployeeProfile } from "../../services/queries/employeeProfileQuerie
 import Highlighter from "react-highlight-words";
 import "./Header.css"; // Import custom CSS file for additional styles
 import Title from "antd/es/typography/Title";
+import { HiCalendar } from "react-icons/hi";
+import { IoCalendarOutline } from "react-icons/io5";
 
 const { Header: AntdHeader } = Layout;
 const { Search } = Input;
@@ -170,6 +172,9 @@ const Header: React.FC = () => {
           </Menu.Item> */}
         </>
       )}
+      <Menu.Item icon={<IoCalendarOutline size={15} />} key="calendar">
+          <NavLink to="/calendar">Calendar</NavLink>
+        </Menu.Item>
 
       <Menu.Divider />
       <Menu.Item key="5" icon={<LogoutOutlined />} onClick={showLogoutConfirm}>

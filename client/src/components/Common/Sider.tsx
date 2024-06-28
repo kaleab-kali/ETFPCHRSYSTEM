@@ -1,15 +1,8 @@
 import React, { useState } from "react";
 import {
-  UserOutlined,
-  EditOutlined,
-  FileTextOutlined,
-  HistoryOutlined,
-} from "@ant-design/icons";
-import {
   IoPersonAddOutline,
   IoListOutline,
   IoCalendarOutline,
-  IoBarChartOutline,
   IoNewspaperOutline,
   IoCheckmarkDone,
 } from "react-icons/io5";
@@ -22,8 +15,6 @@ import {
   LuTrendingUp,
   LuGift,
   LuSheet,
-  LuArrowLeft,
-  LuArrowRight,
   LuPaperclip,
 } from "react-icons/lu";
 import { GrCheckbox, GrDashboard } from "react-icons/gr";
@@ -35,30 +26,27 @@ import { useAuth } from "../../context/AuthContext";
 
 const { Sider: AntdSider } = Layout;
 
-const Sider: React.FC<{ onCollapse: (isCollapsed: boolean) => void }> = ({
-  onCollapse,
+interface SiderProps {
+  collapsed: boolean;
+}
+
+const Sider: React.FC<SiderProps> = ({
+  collapsed,
 }) => {
   const [activeKey, setActiveKey] = useState("");
-  const [collapsed, setCollapsed] = useState(false);
   const { user } = useAuth();
-
   const handleMenuClick = (key: string) => {
     setActiveKey(key);
-  };
-
-  const handleCollapse = (isCollapsed: boolean) => {
-    setCollapsed(isCollapsed);
-    onCollapse(isCollapsed);
   };
 
   return (
     <AntdSider
       collapsible
       collapsed={collapsed}
-      onCollapse={handleCollapse}
+      trigger={null}
       style={{
         backgroundColor: "white",
-        height: "90vh",
+        height: "95vh",
         paddingTop: "40px",
         position: "fixed",
         top: "30px",
@@ -354,9 +342,9 @@ const Sider: React.FC<{ onCollapse: (isCollapsed: boolean) => void }> = ({
             </Menu.SubMenu>
           </>
         )}
-        <Menu.Item icon={<IoCalendarOutline size={20} />} key="calendar">
+        {/* <Menu.Item icon={<IoCalendarOutline size={20} />} key="calendar">
           <NavLink to="/calendar">Calendar</NavLink>
-        </Menu.Item>
+        </Menu.Item> */}
         {/* {(user?.role === "hrmanager" || user?.role === "department head") && (
           <Menu.SubMenu
             icon={<IoBarChartOutline size={20} />}

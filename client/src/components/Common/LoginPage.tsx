@@ -189,9 +189,9 @@ const LoginPage2: React.FC = () => {
           </Col>
         </Row>
       </Content>
-      <Footer style={{ textAlign: "center", zIndex: 10 }}>
+      {/* <Footer style={{ textAlign: "center", zIndex: 10 }}>
         FPC @ {new Date().getFullYear()} Created by FPC Team
-      </Footer>
+      </Footer> */}
 
       <Modal
         title="Forgot Password"
