@@ -1,7 +1,8 @@
 import React from "react";
-import { Card, Progress, Typography } from "antd";
+import { Card, Progress, Typography,  } from "antd";
+import '../../../styles/Adminside/metricCard.css'
 
-const { Title } = Typography;
+const { Title , Text} = Typography;
 
 interface MetricCardProps {
   title: string;
@@ -19,24 +20,26 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   console.log(`MetricCard`, percentage)
   return (
     <Card
+      className="wrapCard"
       styles={{
         body: {
           backgroundColor: color,
           color: "black",
-          height: "140px",
+          height: "120px",
           width: "180px",
           borderRadius: "10px",
+          display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"
         },
         header: { color: "black" },
       }}
       size="small"
-      style={{ width: "180px", height: "140px", borderRadius: "10px" }}
     >
-      <Title style={{ color: "black", marginTop: "-5px" }} level={4}>
+      <Title style={{ color: "#6c6c6c",margin: 0  }} level={4}>
         {title}
       </Title>
-      <p style={{ fontSize: "24px", margin: "0", color: "black" }}>{value}</p>
-      {color === "1" && (
+      <Text style={{ fontSize: "2.5em",fontWeight: "600", color: "#323c43"}}>{value}</Text>
+      {/* <p style={{ , margin: "0", }}>{value}</p> */}
+      {/* {color === "1" && (
         <Progress
           style={{ color: "black" }}
           percent={percentage}
@@ -67,7 +70,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
           strokeColor="purple"
           status="active"
         />
-      )}
+      )} */}
       {/* <p style={{ color: "white" }}>{percentage} Since last month</p> */}
     </Card>
   );

@@ -119,9 +119,9 @@ const LoginPage = () => {
           </Form>
         </div>
       </Content>
-      <Footer style={{ textAlign: "center" }}>
+      {/* <Footer style={{ textAlign: "center" }}>
         FPC @ {new Date().getFullYear()} Created by FPC Team
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 };
