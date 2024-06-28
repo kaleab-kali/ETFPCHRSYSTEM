@@ -1,0 +1,95 @@
+:root {
+  --color1: #24cef0;
+  --color2: #2aa7f4;
+  --color3: #5427f6;
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure loader is above other content */
+}
+
+.loader-container {
+  width: 150px;
+  height: 150px;
+}
+
+.svgLoader {
+  width: 90%;
+  fill: none;
+}
+
+.load {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 570;
+  stroke-width: 20px;
+}
+
+.load.one {
+  stroke: var(--color3);
+  animation: load 1.5s infinite;
+}
+
+.load.two {
+  stroke: var(--color2);
+  animation: load 1.5s infinite;
+  animation-delay: 0.1s;
+}
+
+.load.three {
+  stroke: var(--color1);
+  animation: load 1.5s infinite;
+  animation-delay: 0.2s;
+}
+
+.point {
+  animation: bounce 1s infinite ease-in-out;
+}
+
+.point.one {
+  fill: var(--color1);
+}
+
+.point.two {
+  fill: var(--color2);
+  animation-delay: 0.1s;
+}
+
+.point.three {
+  fill: var(--color3);
+  animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes load {
+  0% {
+    stroke-dashoffset: 570;
+  }
+  50% {
+    stroke-dashoffset: 530;
+  }
+  100% {
+    stroke-dashoffset: 570;
+    transform: rotate(360deg);
+  }
+}
+
+.hidden {
+  display: none;
+}

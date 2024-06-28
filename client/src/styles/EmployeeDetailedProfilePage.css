@@ -1,0 +1,29 @@
+.horizontalMenu {
+    padding: 0 50px;
+}
+
+.personCard {
+    margin-top: 30px;
+    padding: 0 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.fixedSizeCard {
+  width: 300px; /* Adjust as needed */
+  height: 400px; /* Adjust as needed */
+  overflow: auto; /* Adds scroll if content is larger than the fixed size */
+}
+
+.link {
+    color: grey;
+    padding: 0 10px;
+  }
+  
+  .link.active {
+    color: rgb(86, 180, 211) !important;
+    font-weight: bold;
+    text-decoration: underline;
+  }

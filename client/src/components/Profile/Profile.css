@@ -1,0 +1,94 @@
+.layout {
+  background: #f0f2f5;
+  padding: 24px;
+}
+
+
+
+.cover-photo {
+  background: #001529;
+  padding: 40px 20px;
+  text-align: center;
+  color: white;
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.cover-title {
+  color: white !important;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card .ant-card-extra {
+  margin-right: 16px;
+}
+
+.profile-card .ant-avatar {
+  background-color: #87d068;
+}
+
+.current-plan {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.current-plan .ant-typography {
+  margin-bottom: 8px;
+}
+
+.message-card,
+.activity-card,
+.tasks-card,
+.notifications-card,
+.team-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 430px;
+  overflow-y: auto;
+}
+
+.message-card .ant-list-item-meta-title a {
+  color: #1890ff;
+}
+
+.message-read {
+  background: #f6f6f6;
+}
+
+.message-unread {
+  background: #e6f7ff;
+}
+
+.activity-card .ant-list-item {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 0;
+}
+
+.tasks-card .ant-list-item-meta-title {
+  font-weight: 500;
+}
+
+.notifications-card .ant-list-item-meta-title {
+  font-weight: 500;
+}
+
+.team-card .ant-list-item-meta-title {
+  font-weight: 500;
+}
+
+.ant-modal-title {
+  text-align: center;
+}
+
+.ant-modal-footer {
+  display: flex;
+  justify-content: center;
+}

@@ -1,0 +1,22 @@
+.collapsed-menu .ant-menu-item .anticon,
+.collapsed-menu .ant-menu-submenu-title .anticon,
+.expanded-menu .ant-menu-item .anticon,
+.expanded-menu .ant-menu-submenu-title .anticon {
+  font-size: 20px !important; /* Ensure icons stay the same size */
+}
+
+.collapsed-menu .ant-menu-item .ant-menu-title-content,
+.collapsed-menu .ant-menu-submenu-title .ant-menu-title-content {
+  display: none; /* Hide text when collapsed */
+}
+
+.expanded-menu .ant-menu-item .ant-menu-title-content,
+.expanded-menu .ant-menu-submenu-title .ant-menu-title-content {
+  display: inline; /* Show text when expanded */
+}
+
+.ant-menu-item,
+.ant-menu-submenu-title {
+  height: 48px; /* Ensure uniform height for menu items */
+  line-height: 48px;
+}
