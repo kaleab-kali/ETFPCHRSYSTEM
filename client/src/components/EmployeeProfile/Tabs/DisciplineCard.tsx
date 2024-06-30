@@ -1,12 +1,20 @@
-import React from "react";
-import { Card, Row, Col, Badge, Typography } from "antd";
-import { LeaveInfo } from "../../../../../shared/types/leaveTypes";
+import React, { useState } from "react";
+import {
+  Card,
+  Row,
+  Col,
+  Badge,
+  Typography,
+  Upload,
+  message,
+  Button,
+  Form,
+  Modal,
+} from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { useUpdateEvidenceComplaint } from "../../../services/mutations/complaintMutation";
 
 const { Title, Text } = Typography;
-
-interface DisciplineProps {
-  leaveInfo: LeaveInfo;
-}
 
 interface Complaint {
   employeeId?: string;
@@ -16,91 +24,136 @@ interface Complaint {
   complaintId?: string;
   status?: string;
 }
+
 interface DisciplineCardProps {
   complaint: Complaint;
 }
+
 const DisciplineCard: React.FC<DisciplineCardProps> = ({ complaint }) => {
-  // const calculateLeaveDays = () => {
-  //   if (leaveInfo.from && leaveInfo.to) {
-  //     const fromDate = new Date(leaveInfo.from);
-  //     const toDate = new Date(leaveInfo.to);
-  //     const timeDiff = Math.abs(toDate.getTime() - fromDate.getTime());
-  //     return Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1;
-  //   }
-  //   return 0;
-  // };
+  const [form] = Form.useForm();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentRecord, setCurrentRecord] = useState<string>("");
+
+  const evidenceSubmit = useUpdateEvidenceComplaint();
+
+  const showUploadModal = (record: any) => {
+    setCurrentRecord(record);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
+
+  const handleOk = async () => {
+    try {
+      const values = await form.validateFields();
+      const formData = new FormData();
+      formData.append("file", values.file[0].originFileObj);
+      formData.append("complaintId", currentRecord);
+      evidenceSubmit.mutate(formData);
+      console.log("formData "+ formData);
+    console.log("Data before mutation:", Array.from(formData.entries()));
+
+      message.success("File uploaded and evidence updated successfully");
+      setIsModalVisible(false);
+      form.resetFields();
+    } catch (info) {
+      console.log("Validate Failed:", info);
+    }
+  };
 
   return (
     <Card style={{ width: "100%", position: "relative" }}>
-      <Card style={{ width: "100%", position: "relative" }}>
-        <Row gutter={16}>
-          <Col span={6}>
-            <Text
-              type="secondary"
-              style={{ marginBottom: "4px", display: "block" }}
-            >
-              Complaint ID
-            </Text>
-            <Title level={5} style={{ margin: 0 }}>
-              {/* {`${
-                (leaveInfo.from &&
-                  new Date(leaveInfo.from).toLocaleDateString()) ||
-                ""
-              } to ${
-                (leaveInfo.to && new Date(leaveInfo.to).toLocaleDateString()) ||
-                ""
-              }`} */}
-              {complaint.complaintId}
-            </Title>
-          </Col>
-          <Col span={4}>
-            <Text
-              type="secondary"
-              style={{ marginBottom: "4px", display: "block" }}
-            >
-              Complaint Type
-            </Text>
-            <Title level={5} style={{ margin: 0 }}>
-              {complaint.category}
-            </Title>
-          </Col>
-          <Col span={4}>
-            <Text
-              type="secondary"
-              style={{ marginBottom: "4px", display: "block" }}
-            >
-              Complaint
-            </Text>
-            <Title level={5} style={{ margin: 0 }}>
-              {/* {calculateLeaveDays()} */}
-              {complaint.complaint}
-            </Title>
-          </Col>
-          <Col span={8}>
-            <Text
-              type="secondary"
-              style={{ marginBottom: "4px", display: "block" }}
-            >
-              Description
-            </Text>
-            <Title level={5} style={{ margin: 0, whiteSpace: "wrap" }}>
-              {complaint.description}
-            </Title>
-          </Col>
-          <div style={{ position: "absolute", top: 0, right: 0 }}>
-            <Badge.Ribbon
-              text={complaint.status}
-              color={
-                complaint.status === "Medium"
-                  ? "orange"
-                  : complaint.status === "Low"
-                  ? "green"
-                  : "red"
-              }
-            />
-          </div>
-        </Row>
-      </Card>
+      <Row gutter={16}>
+        <Col span={6}>
+          <Text
+            type="secondary"
+            style={{ marginBottom: "4px", display: "block" }}
+          >
+            Complaint ID
+          </Text>
+          <Title level={5} style={{ margin: 0 }}>
+            {complaint.complaintId}
+          </Title>
+        </Col>
+        <Col span={4}>
+          <Text
+            type="secondary"
+            style={{ marginBottom: "4px", display: "block" }}
+          >
+            Complaint Type
+          </Text>
+          <Title level={5} style={{ margin: 0 }}>
+            {complaint.category}
+          </Title>
+        </Col>
+        <Col span={4}>
+          <Text
+            type="secondary"
+            style={{ marginBottom: "4px", display: "block" }}
+          >
+            Complaint
+          </Text>
+          <Title level={5} style={{ margin: 0 }}>
+            {complaint.complaint}
+          </Title>
+        </Col>
+        <Col span={8}>
+          <Text
+            type="secondary"
+            style={{ marginBottom: "4px", display: "block" }}
+          >
+            Description
+          </Text>
+          <Title level={5} style={{ margin: 0, whiteSpace: "wrap" }}>
+            {complaint.description}
+          </Title>
+        </Col>
+        {complaint.status === "inprogress" && (
+          <Button
+            icon={<UploadOutlined />}
+            onClick={() => showUploadModal(complaint?.complaintId)}
+          >
+            Submit File
+          </Button>
+        )}
+        <div style={{ position: "absolute", top: 0, right: 0 }}>
+          <Badge.Ribbon
+            text={complaint.status}
+            color={
+              complaint.status === "Medium"
+                ? "orange"
+                : complaint.status === "Low"
+                ? "green"
+                : "red"
+            }
+          />
+        </div>
+      </Row>
+      <Modal
+        title="Upload File and Update Evidence"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form form={form} layout="vertical">
+          <Form.Item
+            name="file"
+            label="Upload File"
+            valuePropName="fileList"
+            getValueFromEvent={(e: any) =>
+              Array.isArray(e) ? e : e && e.fileList
+            }
+            rules={[{ required: true, message: "Please upload a file!" }]}
+          >
+            <Upload name="file" beforeUpload={() => false}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </Form.Item>
+        </Form>
+      </Modal>
     </Card>
   );
 };

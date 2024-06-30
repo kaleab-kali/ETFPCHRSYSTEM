@@ -33,6 +33,7 @@ function App() {
                   "admin",
                   "employee",
                   "department head",
+                  "committee",
                 ]}
               >
                 <Dashboard />

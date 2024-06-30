@@ -8,6 +8,7 @@ import profileRoute from './routes/profileRoutes'
 import departmentRoute from './routes/departmentRoutes'
 import AppraisalHistoryRoute from "./routes/appraisalHistoryRoutes";
 import complaintRoute from "./routes/complaintRoutes";
+import complaintTypeRoute from "./routes/complaintTypeRoutes";
 import attendance from "./routes/attendanceRoutes";
 import salaryLimitRoute from "./routes/salaryLimitRoutes";
 import salaryRaiseRoute from "./routes/salaryRaiseRoutes";
@@ -62,6 +63,7 @@ app.use("/leaves", leaveRoute);
 app.use("/apprasials", apprasialRoute);
 app.use("/appraisalHistory", AppraisalHistoryRoute);
 app.use("/complaint", complaintRoute);
+app.use("/complaintType", complaintTypeRoute);
 app.use("/attendance", attendance);
 app.use("/holidays", holidayRoutes);
 app.use("/salaryLimits", salaryLimitRoute);

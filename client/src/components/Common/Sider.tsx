@@ -18,6 +18,7 @@ import {
   LuPaperclip,
 } from "react-icons/lu";
 import { GrCheckbox, GrDashboard } from "react-icons/gr";
+import { MdOutlineManageHistory } from "react-icons/md";
 import { CommentOutlined, TeamOutlined } from "@ant-design/icons";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { Layout, Menu } from "antd";
@@ -73,7 +74,7 @@ const Sider: React.FC<SiderProps> = ({
             <NavLink to="/">Dashboard</NavLink>
           </Menu.Item>
         )}
-        {user?.role !== "employee" && (
+        {user?.role !== "employee" && user?.role !== "committee" && (
           <>
             {(user?.role === "admin" || user?.role === "hrmanager") && (
               <>
@@ -207,14 +208,15 @@ const Sider: React.FC<SiderProps> = ({
                   <NavLink to="/employee/registration">Registration</NavLink>
                 </Menu.Item>
               )}
-              {/* {user?.role !== "employee" && ( */}
-              <Menu.Item
-                key="employeeView"
-                icon={<IoListOutline size={20} />}
-                onClick={() => handleMenuClick("employeeView")}
-              >
-                <NavLink to="/employee/view">View</NavLink>
-              </Menu.Item>
+              {user?.role !== "committee" && (
+                <Menu.Item
+                  key="employeeView"
+                  icon={<IoListOutline size={20} />}
+                  onClick={() => handleMenuClick("employeeView")}
+                >
+                  <NavLink to="/employee/view">View</NavLink>
+                </Menu.Item>
+              )}
               {/* )} */}
               {/* <Menu.Item
                 key="employeeEdit"
@@ -226,55 +228,60 @@ const Sider: React.FC<SiderProps> = ({
             </Menu.SubMenu>
           </>
         )}
-        <Menu.SubMenu
-          icon={<LuShoppingBag size={20} />}
-          key="leaveSubMenu"
-          title="Leave"
-        >
-          {(user?.role === "admin" ||
-            user?.role === "manager" ||
-            user?.role === "staff") && (
-            <Menu.Item
-              icon={<GrDashboard size={20} />}
-              key="leaveDashboard"
-              onClick={() => handleMenuClick("leaveDashboard")}
+        {user?.role !== "committee" && (
+          <>
+            <Menu.SubMenu
+              icon={<LuShoppingBag size={20} />}
+              key="leaveSubMenu"
+              title="Leave"
             >
-              <NavLink to="/leave/leaveDashboard">Dashboard</NavLink>
-            </Menu.Item>
-          )}
-          {(user?.role === "employee" || user?.role === "manager") && (
-            <Menu.Item
-              icon={<LuGitPullRequest size={20} />}
-              key="request"
-              onClick={() => handleMenuClick("request")}
-            >
-              <NavLink to="/leave/request">Request</NavLink>
-            </Menu.Item>
-          )}
-          {user?.role !== "employee" && (
-            <>
-              <Menu.Item
-                icon={<GrCheckbox size={20} />}
-                key="currentLeave"
-                onClick={() => handleMenuClick("currentLeave")}
-              >
-                <NavLink to="/leave/currentLeave">Current Leave</NavLink>
-              </Menu.Item>
-              {(user?.role === "hrmanager" ||
-                user?.role === "staff" ||
-                user?.role === "admin") && (
+              {(user?.role === "admin" ||
+                user?.role === "manager" ||
+                user?.role === "staff") && (
                 <Menu.Item
-                  icon={<LuHistory size={20} />}
-                  key="leaveHistory"
-                  onClick={() => handleMenuClick("leaveHistory")}
+                  icon={<GrDashboard size={20} />}
+                  key="leaveDashboard"
+                  onClick={() => handleMenuClick("leaveDashboard")}
                 >
-                  <NavLink to="/leave/history">History</NavLink>
+                  <NavLink to="/leave/leaveDashboard">Dashboard</NavLink>
                 </Menu.Item>
               )}
-            </>
-          )}
-        </Menu.SubMenu>
-        {user?.role !== "admin" && (
+              {(user?.role === "employee" || user?.role === "manager") && (
+                <Menu.Item
+                  icon={<LuGitPullRequest size={20} />}
+                  key="request"
+                  onClick={() => handleMenuClick("request")}
+                >
+                  <NavLink to="/leave/request">Request</NavLink>
+                </Menu.Item>
+              )}
+              {user?.role !== "employee" && (
+                <>
+                  <Menu.Item
+                    icon={<GrCheckbox size={20} />}
+                    key="currentLeave"
+                    onClick={() => handleMenuClick("currentLeave")}
+                  >
+                    <NavLink to="/leave/currentLeave">Current Leave</NavLink>
+                  </Menu.Item>
+                  {(user?.role === "hrmanager" ||
+                    user?.role === "staff" ||
+                    user?.role === "admin") && (
+                    <Menu.Item
+                      icon={<LuHistory size={20} />}
+                      key="leaveHistory"
+                      onClick={() => handleMenuClick("leaveHistory")}
+                    >
+                      <NavLink to="/leave/history">History</NavLink>
+                    </Menu.Item>
+                  )}
+                </>
+              )}
+            </Menu.SubMenu>
+          </>
+        )}
+
+        {user?.role !== "admin" && user?.role !== "committee" && (
           <>
             <Menu.SubMenu
               icon={<LuUserCheck2 size={20} />}
@@ -425,6 +432,15 @@ const Sider: React.FC<SiderProps> = ({
                 Salary Raise Table
               </NavLink>
             </Menu.Item>
+            <Menu.Item
+              icon={<MdOutlineManageHistory size={20} />}
+              key="serviceRewardTable"
+              onClick={() => handleMenuClick("serviceRewardTable")}
+            >
+              <NavLink to="/reward/serviceRewardTable">
+                Service Reward Table
+              </NavLink>
+            </Menu.Item>
           </Menu.SubMenu>
         )}
         <Menu.SubMenu
@@ -441,14 +457,44 @@ const Sider: React.FC<SiderProps> = ({
           </Menu.Item>
           {(user?.role === "hrmanager" ||
             user?.role === "staff" ||
+            user?.role === "committee" ||
             user?.role === "admin") && (
+            <>
+              <Menu.Item
+                icon={<IoListOutline size={20} />}
+                key="complaintList"
+                onClick={() => handleMenuClick("complaintList")}
+              >
+                <NavLink to="/complaint/complaintList">Complaint List</NavLink>
+              </Menu.Item>
+              <Menu.Item
+                icon={<IoListOutline size={20} />}
+                key="complaintEvidence"
+                onClick={() => handleMenuClick("complaintEvidence")}
+              >
+                <NavLink to="/complaint/complaintEvidence">
+                  Complaint Evidence
+                </NavLink>
+              </Menu.Item>
+              <Menu.Item
+                icon={<IoListOutline size={20} />}
+                key="complaintHistory"
+                onClick={() => handleMenuClick("complaintHistory")}
+              >
+                <NavLink to="/complaint/complaintHistory">
+                  Complaint History
+                </NavLink>
+              </Menu.Item>
+            </>
+          )}
+          {user?.role === "department head" && (
             <Menu.Item
               icon={<IoListOutline size={20} />}
-              key="complaintHistory"
-              onClick={() => handleMenuClick("complaintHistory")}
+              key="complaintTranfer"
+              onClick={() => handleMenuClick("complaintTransfer")}
             >
-              <NavLink to="/complaint/complaintHistory">
-                Complaint History
+              <NavLink to="/complaint/complaintTransfer">
+                Complaint List
               </NavLink>
             </Menu.Item>
           )}
