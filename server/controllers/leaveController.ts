@@ -7,34 +7,26 @@ import cron from "node-cron";
 //import { sendMail } from "../mail/sendEmail";
 
 const updateCache: any = {};
+
 const createLeaveInfo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { to, from, employeeId, days, leaveType } = req.body;
+    const { employeeId, days, leaveType } = req.body;
+
     console.log(req.body);
-    const currentDate: any = new Date();
-    const toDate: any = new Date(to);
-    const fromDate: any = new Date(from);
 
-    // Check if the dates are valid
-    if (isNaN(toDate.getTime()) || isNaN(fromDate.getTime())) {
-      res.status(400).json({ error: "Invalid date format" });
-      console.log("Invalid date");
-      return;
-    }
-
-    // Check if the dates are in the past
-    if (toDate < currentDate || fromDate < currentDate) {
-      res
-        .status(400)
-        .json({ message: "The 'to' and 'from' dates must be in the future" });
-      console.log("Date should be in the future");
+    // Validate if the number of requested days is less than 30
+    if (days > 30) {
+      res.status(400).json({
+        message: "The number of days requested should not exceed 30 days",
+      });
+      console.log("The number of days requested should not exceed 30 days");
       return;
     }
 
     const employee: any = await Employee.findOne({ empId: employeeId });
     if (!employee) {
       res.status(404).json({ message: "Employee not found with this ID" });
-      console.log("No employee found with this ID",employeeId);
+      console.log("No employee found with this ID", employeeId);
       return;
     }
 
@@ -42,17 +34,12 @@ const createLeaveInfo = async (req: Request, res: Response): Promise<void> => {
     const overlappingLeaves = await LeaveInfoModel.find({
       employeeId,
       status: { $in: ["pending", "approved"] },
-      $or: [
-        { from: { $lte: toDate, $gte: fromDate } },
-        { to: { $gte: fromDate, $lte: toDate } },
-        { from: { $lte: fromDate }, to: { $gte: toDate } },
-      ],
     });
 
     if (overlappingLeaves.length > 0) {
-      res
-        .status(400)
-        .json({ message: "You have an overlapping or unfinished leave request" });
+      res.status(400).json({
+        message: "You have an overlapping or unfinished leave request",
+      });
       console.log("Overlapping or unfinished leave request found");
       return;
     }
@@ -73,9 +60,9 @@ const createLeaveInfo = async (req: Request, res: Response): Promise<void> => {
       (balance: any) => balance.leaveType === leaveType
     );
     if (!leaveTypeBalance) {
-      res
-        .status(404)
-        .json({ message: `Leave type ${leaveType} not found for the employee` });
+      res.status(404).json({
+        message: `Leave type ${leaveType} not found for the employee`,
+      });
       console.log(`Leave type ${leaveType} not found for the employee`);
       return;
     }
@@ -127,6 +114,8 @@ const createLeaveInfo = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 
 const getLeaveInfoByEmployeeId = async (
   req: Request,
@@ -489,15 +478,49 @@ const getLeaveInfoForManager = async (
 
 const updateLeaveInfo = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { leaveId, status, delegatedTo = "", reason = "" } = req.body;
+    const {
+      leaveId,
+      status,
+      delegatedTo = "",
+      reason = "",
+      from,
+      to,
+    } = req.body;
 
     console.log("Leave ID:", leaveId);
-    console.log("data from req body  ", req.body);
+    console.log("Data from req body:", req.body);
 
     const leaveInfo: any = await LeaveInfoModel.findOne({ leaveId: leaveId });
 
     if (!leaveInfo) {
       res.status(404).json({ message: "Leave info not found" });
+      return;
+    }
+
+    // Validate the dates
+    const fromDate: any = new Date(from);
+    const toDate: any = new Date(to);
+    const currentDate: any = new Date();
+
+    if (isNaN(toDate.getTime()) || isNaN(fromDate.getTime())) {
+      res.status(400).json({ error: "Invalid date format" });
+      console.log("Invalid date");
+      return;
+    }
+
+    if (toDate < currentDate || fromDate < currentDate) {
+      res
+        .status(400)
+        .json({ message: "The 'to' and 'from' dates must be in the future" });
+      console.log("Date should be in the future");
+      return;
+    }
+
+    if (toDate < fromDate) {
+      res
+        .status(400)
+        .json({ message: "'To' date cannot be earlier than 'from' date" });
+      console.log("'To' date cannot be earlier than 'from' date");
       return;
     }
 
@@ -511,23 +534,19 @@ const updateLeaveInfo = async (req: Request, res: Response): Promise<void> => {
         },
         { new: true }
       );
-      console.log("rejected success ");
+      console.log("Rejected successfully");
 
       const employee = await Employee.findOne({ empId: leaveInfo.employeeId });
       if (employee) {
-        // Notify the employee about the rejection and to come to work
         await NotificationService.createNotification(
           employee._id.toString(),
           "Leave Request Rejected",
           "Your leave request has been rejected."
         );
       }
-      res.status(200).json({ message: "rejected success" });
+      res.status(200).json({ message: "Rejected successfully" });
       return;
     }
-
-    const fromDate = new Date(leaveInfo.from); // Use the actual from date
-    const toDate = new Date(leaveInfo.to);
 
     if (delegatedTo) {
       const delegator = await Employee.findOne({ empId: delegatedTo });
@@ -542,7 +561,7 @@ const updateLeaveInfo = async (req: Request, res: Response): Promise<void> => {
       // Check for overlapping pending leave requests for the delegator
       const overlappingLeaves = await LeaveInfoModel.find({
         employeeId: delegatedTo,
-        status: "pending" || "approved",
+        status: { $in: ["pending", "approved"] },
         $or: [
           { from: { $lte: toDate, $gte: fromDate } },
           { to: { $gte: fromDate, $lte: toDate } },
@@ -557,6 +576,7 @@ const updateLeaveInfo = async (req: Request, res: Response): Promise<void> => {
         });
         return;
       }
+
       // Check if the delegatedTo employee is delegated or assigned to another employee on leave currently
       const isDelegatedToAnother = await LeaveInfoModel.find({
         delegatedTo: delegatedTo,
@@ -575,25 +595,29 @@ const updateLeaveInfo = async (req: Request, res: Response): Promise<void> => {
         });
         return;
       }
-      const updatedLeaveInfo: any = await LeaveInfoModel.findOne(
-        { leaveId: leaveId }
-      );
+
+      const updatedLeaveInfo: any = await LeaveInfoModel.findOne({
+        leaveId: leaveId,
+      });
       const requester: any = await Employee.findOne({
         empId: updatedLeaveInfo.employeeId,
       });
-if (!requester) {
-  res.status(400).json({ message: "Requester not found with the given id " });
-  console.log("Requester: not found ");
-  return;
-}
 
-// Check if the requester and the delegator are in the same department
-if (requester.department !== delegator.department) {
-  res.status(400).json({
-    message: "Requester and delegator are not in the same department",
-  });
-  return;
-}
+      if (!requester) {
+        res
+          .status(400)
+          .json({ message: "Requester not found with the given id " });
+        console.log("Requester: not found ");
+        return;
+      }
+
+      // Check if the requester and the delegator are in the same department
+      if (requester.department !== delegator.department) {
+        res.status(400).json({
+          message: "Requester and delegator are not in the same department",
+        });
+        return;
+      }
 
       await LeaveInfoModel.findOneAndUpdate(
         { leaveId: leaveId },
@@ -609,10 +633,10 @@ if (requester.department !== delegator.department) {
 
     console.log("Body is", req.body);
 
-    // Update the leave status
+    // Update the leave status and dates
     const updatedLeaveInfo: any = await LeaveInfoModel.findOneAndUpdate(
       { leaveId: leaveId },
-      { status },
+      { status, from: fromDate, to: toDate },
       { new: true }
     );
 
@@ -636,8 +660,7 @@ if (requester.department !== delegator.department) {
     }
 
     // Find the latest year's leave balance
-    const latestLeaveBalance =
-      employee.leaveBalances[employee.leaveBalances.length - 1];
+    const latestLeaveBalance =      employee.leaveBalances[employee.leaveBalances.length - 1];
 
     if (!latestLeaveBalance) {
       res
@@ -654,12 +677,16 @@ if (requester.department !== delegator.department) {
     if (!leaveTypeBalance) {
       res
         .status(404)
-        .json({ message: `Leave type ${leaveType} not found for the employee` });
+        .json({
+          message: `Leave type ${leaveType} not found for the employee`,
+        });
       return;
     }
 
     // Update the leave balances
-    console.log("daysss "+ days)
+    console.log("days: " + days);
+    console.log("wait for the hr approval to proceed leave balance update")
+    
     leaveTypeBalance.used += days;
     leaveTypeBalance.available -= days;
 
@@ -688,6 +715,7 @@ if (requester.department !== delegator.department) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const updateLeaveBalances = async (
   req: Request,
@@ -724,16 +752,14 @@ const updateLeaveBalances = async (
     const currentCredit = leaveBalanceToUpdate.credit;
     const currentUsed = leaveBalanceToUpdate.used;
 
-    const newCredit =
-      updatedValues.credit !== undefined ? updatedValues.credit : currentCredit;
-    const newUsed =
-      updatedValues.used !== undefined ? updatedValues.used : currentUsed;
+    const newCredit = updatedValues.credit !== undefined ? updatedValues.credit : currentCredit;
+    const newUsed =updatedValues.used !== undefined ? updatedValues.used : currentUsed;
 
     leaveBalanceToUpdate.credit = newCredit;
     leaveBalanceToUpdate.used = newUsed;
     leaveBalanceToUpdate.available = newCredit - newUsed;
-    console.log("dff ", leaveBalanceToUpdate)
-    // Save the updated employee document
+    console.log("leave balance to update  ", leaveBalanceToUpdate)
+
     await employee.save();
 
     res.status(200).json({
@@ -863,88 +889,94 @@ const deleteLeaveInfo = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-//TODO transfer local function
-// const transferAvailables = async (): Promise<void> => {
-//   try {
-//     const currentYear = new Date().getFullYear();
 
-//     // Fetch all employees
-//     const employees = await Employee.find(
-//       {},
-//       "firstName empId leaveBalances lastUpdated"
-//     );
+const hrLeaveApproval = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { leaveId, confirm } = req.body;
 
-//     if (!employees || employees.length === 0) {
-//       console.log("No employees found");
-//       return;
-//     }
+    console.log("Leave ID:", leaveId);
+    console.log("Confirm:", confirm);
 
-//     // Process each employee's leave balances
-//     const processedLeaveBalancesData = employees.map(async (employee) => {
-//       // Check if the leave balances were already updated this year
-//       if (
-//         employee.lastUpdated &&
-//         new Date(employee.lastUpdated).getFullYear() === currentYear
-//       ) {
-//         return {
-//           firstName: employee.firstName,
-//           empId: employee.empId,
-//           leaveBalances: employee.leaveBalances,
-//         };
-//       }
+    const leaveInfo: any = await LeaveInfoModel.findOne({ leaveId });
 
-//       // Traverse the leave balances from the oldest to the latest year
-//       for (let i = 0; i < employee.leaveBalances.length - 1; i++) {
-//         const currentYearBalance = employee.leaveBalances[i];
-//         const nextYearBalance = employee.leaveBalances[i + 1];
+    if (!leaveInfo) {
+      res.status(404).json({ message: "Leave info not found" });
+      return;
+    }
 
-//         // Add current year's available leaves to the next year's credit for "annual" leave type
-//         currentYearBalance.balances.forEach((balance) => {
-//           if (balance.leaveType === "annual") {
-//             const nextYearLeave = nextYearBalance.balances.find(
-//               (nextBalance) => nextBalance.leaveType === balance.leaveType
-//             );
+    if (leaveInfo.hrApproval) {
+      res.status(400).json({ message: "Leave request already approved by HR" });
+      return;
+    }
 
-//             if (nextYearLeave) {
-//               nextYearLeave.credit += balance.available;
-//             } else {
-//               nextYearBalance.balances.push({
-//                 leaveType: balance.leaveType,
-//                 credit: balance.available,
-//                 used: 0,
-//                 available: balance.available, // initially set available to the transferred available
-//               });
-//             }
-//           }
-//         });
+    if (!confirm) {
+      res.status(400).json({ message: "HR approval confirmation required" });
+      return;
+    }
 
-//         // Recalculate the available balance for the next year
-//         nextYearBalance.balances.forEach((nextBalance) => {
-//           if (nextBalance.leaveType === "annual") {
-//             nextBalance.available = nextBalance.credit - nextBalance.used;
-//           }
-//         });
-//       }
+    leaveInfo.hrApproval = true;
 
-//       // Update lastUpdated field
-//       employee.lastUpdated = new Date();
-//       await employee.save();
+    // Find the employee by the employeeId from the leaveInfo
+    const employee: any = await Employee.findOne({
+      empId: leaveInfo.employeeId,
+    });
 
-//       return {
-//         firstName: employee.firstName,
-//         empId: employee.empId,
-//         leaveBalances: employee.leaveBalances,
-//       };
-//     });
+    if (!employee) {
+      res.status(404).json({ message: "Employee not found" });
+      return;
+    }
 
-//     // Wait for all promises to resolve
-//     await Promise.all(processedLeaveBalancesData);
+    // Find the latest year's leave balance
+    const latestLeaveBalance =
+      employee.leaveBalances[employee.leaveBalances.length - 1];
 
-//     console.log("Leave balances processed and updated successfully");
-//   } catch (error) {
-//     console.error("Error updating leave balances:", error);
-//   }
-// };
+    if (!latestLeaveBalance) {
+      res
+        .status(404)
+        .json({ message: "Leave balances not found for the employee" });
+      return;
+    }
+
+    // Find the specific leave type balance within the latest year
+    const leaveTypeBalance = latestLeaveBalance.balances.find(
+      (balance: any) => balance.leaveType === leaveInfo.leaveType
+    );
+
+    if (!leaveTypeBalance) {
+      res
+        .status(404)
+        .json({
+          message: `Leave type ${leaveInfo.leaveType} not found for the employee`,
+        });
+      return;
+    }
+
+    // Update the leave balances
+    leaveTypeBalance.used += leaveInfo.days;
+    leaveTypeBalance.available -= leaveInfo.days;
+
+    // Save the updated leave info and employee leave balances
+    await leaveInfo.save();
+    await employee.save();
+
+    await NotificationService.createNotification(
+      employee._id.toString(),
+      "Leave Request Approved by HR",
+      "Your leave request has been approved by HR. Enjoy your leave!"
+    );
+
+    res.status(200).json({
+      message:
+        "Leave request approved by HR and leave balances updated successfully",
+      leaveInfo,
+      leaveBalances: employee.leaveBalances,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 export {
   createLeaveInfo,
@@ -959,4 +991,5 @@ export {
   getAllLeaveBalancesByYearForAllEmployees,
   getLeaveInfoByEmployeeId,
   transferAvailableCredits,
+  hrLeaveApproval
 };

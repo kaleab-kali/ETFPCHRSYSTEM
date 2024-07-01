@@ -13,6 +13,7 @@ export interface LeaveInfo extends Document {
   delegatedTo?: string | undefined;
   reason?: string | undefined;
   rejectReason?: string | undefined;
+  hrApproval?:string|undefined;
 
 }
 const leaveInfoSchema = new Schema<LeaveInfo>(
@@ -28,6 +29,7 @@ const leaveInfoSchema = new Schema<LeaveInfo>(
     delegatedTo: { type: String },
     reason: { type: String },
     rejectReason: { type: String },
+    hrApproval:{type:Boolean,default:false}
   
   },
   { timestamps: true }
