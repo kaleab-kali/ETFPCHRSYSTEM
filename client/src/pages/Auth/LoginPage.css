@@ -1,3 +1,31 @@
+.ant-input {
+  background-color: transparent;
+}
+
+.transparent-input {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+}
+
+.transparent-input .ant-input {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+}
+
+.transparent-input .ant-input::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.transparent-input .ant-input-password {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+}
+
+
+
 .login-container {
   height: 100vh;
   display: flex;

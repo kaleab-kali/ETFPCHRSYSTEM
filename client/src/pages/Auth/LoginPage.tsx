@@ -17,7 +17,10 @@ import { useNavigate } from "react-router-dom";
 import Login from "../../assets/Login.jpg";
 import "./LoginPage.css";
 import { Option } from "antd/es/mentions";
-import { useLoginMutation, useForgetPasswordRequestMutation } from "../../services/mutations/authMutation";
+import {
+  useLoginMutation,
+  useForgetPasswordRequestMutation,
+} from "../../services/mutations/authMutation";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text, Link } = Typography;
@@ -27,15 +30,11 @@ const LoginPage2: React.FC = () => {
   const [loginType, setLoginType] = useState<"employee" | "hrstaffs">(
     "employee"
   );
-  const forgetPassReq= useForgetPasswordRequestMutation()
+  const forgetPassReq = useForgetPasswordRequestMutation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [email, setEmail] = useState("");
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
 
-  const { mutate: handleLogin, status: loading } =
-    useLoginMutation(loginType);
+  const { mutate: handleLogin, status: loading } = useLoginMutation(loginType);
 
   const onFinish = (values: { email: string; password: string }) => {
     handleLogin(values);
@@ -51,7 +50,7 @@ const LoginPage2: React.FC = () => {
 
   const handleOk = () => {
     // Handle email submission logic here
-    forgetPassReq.mutate(email)
+    forgetPassReq.mutate(email);
     setIsModalVisible(false);
     // message.success("Password reset email sent!\n the Admin will contact you");
   };
@@ -61,51 +60,42 @@ const LoginPage2: React.FC = () => {
   };
 
   return (
-    <Layout style={{ background: "#fff" }}>
+    <Layout
+      style={{
+        backgroundImage: "url(/main.webp)",
+        height: "100vh",
+        width: "100vw",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
       <Header
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          background: "transparent",
           padding: 20,
-          backgroundColor: "#ADD8E6",
-          zIndex: 10,
         }}
       >
         <img
           src={process.env.PUBLIC_URL + "/fpp.jpg"}
           alt="Company Logo"
           style={{
-            height: "60px",
+            height: "70px",
             borderRadius: "50%",
-            marginRight: "20px",
+            marginLeft: 30,
           }}
         />
-        <Title level={2} style={{ color: "white", margin: 0 }}>
-          Federal Prison HR
-        </Title>
       </Header>
-      <Content>
-        <Row className="login-container" style={{ background: "white" }}>
+      <Content style={{ background: "transparent" }}>
+        <Row className="login-container" style={{ background: "transparent" }}>
           <Col className="login-form-container" xs={24} md={12}>
-            <Card bordered={false} style={{ width: "60%" }}>
-              <div className="logo">
-                <img
-                  src={process.env.PUBLIC_URL + "/fpp.jpg"}
-                  alt="Company Logo"
-                  style={{
-                    height: "70px",
-                    borderRadius: "20px",
-                    margin: "20px 10px",
-                  }}
-                />
-                <Title level={3} style={{ margin: 0 }}>
-                  Federal Prison HR
-                </Title>
-              </div>
-              <Title style={{ textAlign: "center" }} level={2}>
-                Welcome Back!
-              </Title>
+            <Card
+              bordered={false}
+              style={{ width: "60%",  }}
+            >
               <Select
                 defaultValue="employee"
                 style={{
@@ -123,7 +113,6 @@ const LoginPage2: React.FC = () => {
                 <Option value="hrstaffs">HRStaffs</Option>
               </Select>
               <br />
-              <Text>Please enter login details below</Text>
               <Form
                 name="login"
                 initialValues={{ remember: true }}
@@ -139,7 +128,10 @@ const LoginPage2: React.FC = () => {
                     { required: true, message: "Please input your email!" },
                   ]}
                 >
-                  <Input placeholder="Enter the email" />
+                  <Input
+                    placeholder="Enter the email"
+                    className="transparent-input"
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -165,7 +157,7 @@ const LoginPage2: React.FC = () => {
                     type="primary"
                     htmlType="submit"
                     block
-                    loading={loading==="pending"}
+                    loading={loading === "pending"}
                   >
                     Sign in
                   </Button>
@@ -173,25 +165,8 @@ const LoginPage2: React.FC = () => {
               </Form>
             </Card>
           </Col>
-          <Col
-            className="login-image-container"
-            style={{
-              background: "white",
-              marginLeft: "-140px",
-              height: "800px",
-              marginTop: "-100px",
-              zIndex: "1",
-            }}
-            xs={0}
-            md={12}
-          >
-            <img src={Login} alt="Login Image" height={"900px"} />
-          </Col>
         </Row>
       </Content>
-      {/* <Footer style={{ textAlign: "center", zIndex: 10 }}>
-        FPC @ {new Date().getFullYear()} Created by FPC Team
-      </Footer> */}
 
       <Modal
         title="Forgot Password"

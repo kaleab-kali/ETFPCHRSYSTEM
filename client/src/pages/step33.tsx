@@ -3,6 +3,7 @@ import { Col, DatePicker, Form, Input, Row, Select } from "antd";
 import { EmployeeProfileInfo } from "../../../shared/types/employeeProfileModel";
 import { data } from "../utils/data";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 

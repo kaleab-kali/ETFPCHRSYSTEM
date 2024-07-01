@@ -8,6 +8,8 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { LoadingProvider } from "./context/LoadingContext";
 import GlobalLoadingSpinner from "./context/GlobalLoadingSpinner";
+import "./utils/i18n";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

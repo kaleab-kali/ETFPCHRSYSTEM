@@ -23,6 +23,8 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { Layout, Menu } from "antd";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
+import { R } from "@tanstack/react-query-devtools/build/legacy/devtools-9h89nHJX";
 
 const { Sider: AntdSider } = Layout;
 
@@ -34,6 +36,7 @@ const Sider: React.FC<SiderProps> = ({
   collapsed,
 }) => {
   const [activeKey, setActiveKey] = useState("");
+  const {t}=useTranslation();
   const { user } = useAuth();
   const handleMenuClick = (key: string) => {
     setActiveKey(key);
@@ -70,7 +73,7 @@ const Sider: React.FC<SiderProps> = ({
             icon={<LuLayoutDashboard size={20} />}
             onClick={() => handleMenuClick("dashboard")}
           >
-            <NavLink to="/">Dashboard</NavLink>
+            <NavLink to="/">{t('dashboard')}</NavLink>
           </Menu.Item>
         )}
         {user?.role !== "employee" && (
@@ -80,7 +83,7 @@ const Sider: React.FC<SiderProps> = ({
                 <Menu.SubMenu
                   icon={<TeamOutlined size={20} />}
                   key="organizationSubMenu"
-                  title="Organization"
+                  title={t('organization')}
                 >
                   <Menu.Item
                     key="staffInfo"
@@ -92,7 +95,7 @@ const Sider: React.FC<SiderProps> = ({
                     key="organizationDepartment"
                     onClick={() => handleMenuClick("organizationDepartment")}
                   >
-                    <NavLink to="/organization/department">Department</NavLink>
+                    <NavLink to="/organization/department">{t('department')}</NavLink>
                   </Menu.Item>
 
                   <Menu.Item
@@ -116,12 +119,12 @@ const Sider: React.FC<SiderProps> = ({
                     <NavLink to="/organization/education">Education</NavLink>
                   </Menu.Item>
 
-                  <Menu.Item
+                  {/* <Menu.Item
                     key="organizationEthnicity"
                     onClick={() => handleMenuClick("organizationEthnicity")}
                   >
                     <NavLink to="/organization/ethnicity">Ethnicity</NavLink>
-                  </Menu.Item>
+                  </Menu.Item> */}
 
                   <Menu.Item
                     key="organizationAddressInfo"
@@ -196,7 +199,7 @@ const Sider: React.FC<SiderProps> = ({
                 />
               }
               key="employeeSubMenu"
-              title="Employee"
+              title={t('employee')}
             >
               {(user?.role === "staff" || user?.role === "hrmanager") && (
                 <Menu.Item
@@ -204,7 +207,7 @@ const Sider: React.FC<SiderProps> = ({
                   icon={<IoPersonAddOutline size={20} />}
                   onClick={() => handleMenuClick("employeeRegistration")}
                 >
-                  <NavLink to="/employee/registration">Registration</NavLink>
+                  <NavLink to="/employee/registration">{t('Registration')}</NavLink>
                 </Menu.Item>
               )}
               {/* {user?.role !== "employee" && ( */}
@@ -213,7 +216,7 @@ const Sider: React.FC<SiderProps> = ({
                 icon={<IoListOutline size={20} />}
                 onClick={() => handleMenuClick("employeeView")}
               >
-                <NavLink to="/employee/view">View</NavLink>
+                <NavLink to="/employee/view">{t('list')}</NavLink>
               </Menu.Item>
               {/* )} */}
               {/* <Menu.Item
@@ -229,7 +232,7 @@ const Sider: React.FC<SiderProps> = ({
         <Menu.SubMenu
           icon={<LuShoppingBag size={20} />}
           key="leaveSubMenu"
-          title="Leave"
+          title={t('leave')}
         >
           {(user?.role === "admin" ||
             user?.role === "manager" ||
@@ -239,7 +242,7 @@ const Sider: React.FC<SiderProps> = ({
               key="leaveDashboard"
               onClick={() => handleMenuClick("leaveDashboard")}
             >
-              <NavLink to="/leave/leaveDashboard">Dashboard</NavLink>
+              <NavLink to="/leave/leaveDashboard">{t('dashboard')}</NavLink>
             </Menu.Item>
           )}
           {(user?.role === "employee" || user?.role === "manager") && (
@@ -248,7 +251,7 @@ const Sider: React.FC<SiderProps> = ({
               key="request"
               onClick={() => handleMenuClick("request")}
             >
-              <NavLink to="/leave/request">Request</NavLink>
+              <NavLink to="/leave/request">{t('request')}</NavLink>
             </Menu.Item>
           )}
           {user?.role !== "employee" && (
@@ -258,7 +261,7 @@ const Sider: React.FC<SiderProps> = ({
                 key="currentLeave"
                 onClick={() => handleMenuClick("currentLeave")}
               >
-                <NavLink to="/leave/currentLeave">Current Leave</NavLink>
+                <NavLink to="/leave/currentLeave">{t('currentLeave')}</NavLink>
               </Menu.Item>
               {(user?.role === "hrmanager" ||
                 user?.role === "staff" ||
@@ -268,7 +271,7 @@ const Sider: React.FC<SiderProps> = ({
                   key="leaveHistory"
                   onClick={() => handleMenuClick("leaveHistory")}
                 >
-                  <NavLink to="/leave/history">History</NavLink>
+                  <NavLink to="/leave/history">{t('history')}</NavLink>
                 </Menu.Item>
               )}
             </>
@@ -279,7 +282,7 @@ const Sider: React.FC<SiderProps> = ({
             <Menu.SubMenu
               icon={<LuUserCheck2 size={20} />}
               key="attendanceSubMenu"
-              title="Attendance"
+              title={t("attendance")}
             >
               {(user?.role === "hrmanager" || user?.role === "staff") && (
                 <Menu.Item

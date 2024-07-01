@@ -14,6 +14,7 @@ import { data } from "../utils/data";
 
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
+import { useTranslation } from "react-i18next";
 
 type EthiopiaData = {
   [region: string]: {
