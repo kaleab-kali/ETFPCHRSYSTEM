@@ -123,9 +123,9 @@ const DisciplineCard: React.FC<DisciplineCardProps> = ({ complaint }) => {
           <Badge.Ribbon
             text={complaint.status}
             color={
-              complaint.status === "Medium"
+              complaint.status === "inprogress"
                 ? "orange"
-                : complaint.status === "Low"
+                : complaint.status === "not guilt"
                 ? "green"
                 : "red"
             }

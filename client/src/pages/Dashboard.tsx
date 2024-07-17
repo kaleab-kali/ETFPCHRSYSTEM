@@ -127,8 +127,6 @@ const Dashboard: React.FC = () => {
                   </ProtectedRoute>
                 }
               ></Route>
-              {/* <Route path="/" element={<EmployeeForm />}></Route> */}
-              {/* <Route path="/" element={<HRDashboard />}></Route> */}
               <Route
                 path="/profile"
                 element={
@@ -140,8 +138,6 @@ const Dashboard: React.FC = () => {
                   </ProtectedRoute>
                 }
               ></Route>
-
-              {/* <Route path="/login" element={<LoginPage />}></Route> */}
 
               <Route path="/organization">
                 <Route
@@ -511,7 +507,7 @@ const Dashboard: React.FC = () => {
                   path="complaintTransfer"
                   element={
                     <ProtectedRoute
-                      roles={["hrmanager", "department head", "admin", "staff"]}
+                      roles={["hrmanager", "department head", "admin", "staff", "manager"]}
                     >
                       <ComplaintTransfer />
                     </ProtectedRoute>

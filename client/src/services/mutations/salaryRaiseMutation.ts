@@ -8,9 +8,9 @@ export function useCreateSalaryRaise() {
   const { setLoading } = useLoading();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: SalaryRaiseType) => {
+    mutationFn: () => {
       setLoading(true);
-      return createSalaryRaise(data);
+      return createSalaryRaise();
     },
     onError: (error: any) => {
       console.log("error");

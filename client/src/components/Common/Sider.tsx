@@ -487,17 +487,18 @@ const Sider: React.FC<SiderProps> = ({
               </Menu.Item>
             </>
           )}
-          {user?.role === "department head" && (
-            <Menu.Item
-              icon={<IoListOutline size={20} />}
-              key="complaintTranfer"
-              onClick={() => handleMenuClick("complaintTransfer")}
-            >
-              <NavLink to="/complaint/complaintTransfer">
-                Complaint List
-              </NavLink>
-            </Menu.Item>
-          )}
+          {(user?.role === "department head" ||
+            user?.role === "manager") && (
+              <Menu.Item
+                icon={<IoListOutline size={20} />}
+                key="complaintTranfer"
+                onClick={() => handleMenuClick("complaintTransfer")}
+              >
+                <NavLink to="/complaint/complaintTransfer">
+                  Complaint List
+                </NavLink>
+              </Menu.Item>
+            )}
         </Menu.SubMenu>
       </Menu>
     </AntdSider>

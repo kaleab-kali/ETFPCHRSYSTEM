@@ -99,13 +99,13 @@ const ComplaintTransfer: React.FC = () => {
           >
             Transfer
           </Button>
-          <Button
+          {/* <Button
             type="default"
             danger
             onClick={() => handleReject(record.complaintId!)}
           >
             Reject
-          </Button>
+          </Button> */}
         </Space>
       ),
     },
