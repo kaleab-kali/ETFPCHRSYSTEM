@@ -8,8 +8,10 @@ import {
   useManagerEmployee,
 } from "../../services/queries/employeeQueries";
 import { useDeleteEmployee } from "../../services/mutations/employeeMutations";
+import { useAllDepartments } from "../../services/queries/departmentQueries";
 import { useAuth } from "../../context/AuthContext";
 import { ColumnsType } from "antd/es/table";
+import { DepartmentInfo } from "../../../../shared/types/departmentTypes";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -27,6 +29,7 @@ const EmployeeProfilePage: React.FC = () => {
   const navigate = useNavigate();
 
   const deleteEmployeeMutation = useDeleteEmployee();
+  const departmentsQuery = useAllDepartments();
 
   const handleDelete = (key: string) => {
     deleteEmployeeMutation.mutate(key);
@@ -35,6 +38,18 @@ const EmployeeProfilePage: React.FC = () => {
   const employeesQuery = useAllEmployees();
   const depHead = useDepartmentHeadEmployee(user?.employeeId || "");
   const manager = useManagerEmployee(user?.employeeId || "");
+
+ 
+  const depData = departmentsQuery.data
+  ? departmentsQuery.data.map((queryResult: DepartmentInfo) => {
+      return {
+        departmentID: queryResult.departmentID,
+        departmentName: queryResult.departmentName,
+        departmentHead: queryResult.departmentHead,
+      };
+    })
+  : [];
+  console.log("departmentn data",depData);
 
   const employees =
     user?.role === "department head"
@@ -122,11 +137,6 @@ const EmployeeProfilePage: React.FC = () => {
         a.department.localeCompare(b.department),
     },
     {
-      title: "Department",
-      dataIndex: "department",
-      key: "department",
-    },
-    {
       title: "Action",
       key: "action",
       render: (text: any, record: Employee) => (
@@ -157,17 +167,13 @@ const EmployeeProfilePage: React.FC = () => {
       </div>
       <div className="tableBlock">
         <Space style={{ marginBottom: 16 }}>
-          <Select
-            placeholder="Select Department"
-            style={{ width: 200 }}
-            onChange={handleDepartmentChange}
-            allowClear
-          >
-            <Option value="PoliceComission">Police Comission</Option>
-            <Option value="Transport">Transport</Option>
-            <Option value="Finance">Finance</Option>
-            {/* Add other departments here */}
-          </Select>
+        <Select placeholder="Select a department" onChange={handleDepartmentChange} style={{width: 200}} allowClear>
+              {depData.map((department) => (
+                <Option key={department.departmentID} value={department.departmentName}>
+                  {department.departmentName}
+                </Option>
+              ))}
+            </Select>
           <Input
             placeholder="Search by name"
             value={searchText}

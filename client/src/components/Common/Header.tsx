@@ -32,6 +32,7 @@ import "./Header.css"; // Import custom CSS file for additional styles
 import Title from "antd/es/typography/Title";
 import { HiCalendar } from "react-icons/hi";
 import { IoCalendarOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const { Header: AntdHeader } = Layout;
 const { Search } = Input;
@@ -56,6 +57,7 @@ const searchIndex: SearchResult[] = [
 ];
 
 const Header: React.FC = () => {
+  const { t, i18n} = useTranslation();
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const { user, logout } = useAuth();
@@ -69,6 +71,7 @@ const Header: React.FC = () => {
   // const {user}= useAuth()
   const employee = useEmployeeProfile();
   const profile = employee.data;
+  console.log("emolyee data", profile);
   const navigate = useNavigate();
 
   const showLogoutConfirm = () => {
@@ -132,7 +135,7 @@ const Header: React.FC = () => {
   };
 
   const handleLanguageChange = (value: string) => {
-    // Handle language change logic here
+    i18n.changeLanguage(value);
     console.log("Selected language:", value);
   };
 
@@ -236,7 +239,8 @@ const Header: React.FC = () => {
               borderRadius: "20px",
             }}
           />
-          PHRMS
+          {t('organizationName')}
+          {/* PHRMS */}
         </div>
         <div style={{ position: "relative", marginTop: "30px" }}>
           <Search
@@ -292,15 +296,15 @@ const Header: React.FC = () => {
               <BellOutlined style={{ fontSize: 20 }} />
             </Badge>
           </Dropdown>
-          {/* <Select
+          <Select
             defaultValue="en"
             style={{ width: 100, marginRight: 20 }}
             onChange={handleLanguageChange}
           >
             <Option value="en">English</Option>
-            <Option value="es">Español</Option>
-            <Option value="fr">Français</Option>
-          </Select> */}
+            <Option value="am">Amharic</Option>
+            <Option value="fr">somalia</Option>
+          </Select>
           <Dropdown overlay={ProfileMenu} trigger={["click"]}>
             <div
               style={{

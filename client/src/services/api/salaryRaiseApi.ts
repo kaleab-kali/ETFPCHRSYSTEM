@@ -28,14 +28,13 @@ export const getSalaryRaise = async (id: string) => {
   }
 };
 
-export const createSalaryRaise = async (data: SalaryRaiseType) => {
+export const createSalaryRaise = async () => {
   try {
     await fetchWithAuth(`${BASE_URL}/salaryRaise`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
     });
   } catch (error) {
     handleError(error);

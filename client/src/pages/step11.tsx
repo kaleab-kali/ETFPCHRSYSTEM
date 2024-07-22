@@ -10,6 +10,7 @@ import { useAllDepartments } from "../services/queries/departmentQueries";
 import { useAllTitles } from "../services/queries/titleQueries";
 import { UploadChangeParam } from "antd/lib/upload";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 
@@ -32,6 +33,7 @@ const departments = [
 ];
 
 const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
+  const {t} = useTranslation();
   const [form] = Form.useForm();
   const [region, setRegion] = useState<string | null>(null);
   const [subcity, setSubcity] = useState<string | null>(null);
@@ -146,7 +148,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         <Col span={8}>
           {/* <Col  xs={24} sm={12} md={8} lg={6}> */}
           <Form.Item
-            label="Title"
+            label={t('title')}
             name="title"
             rules={[{ required: true, message: "Please select a title" }]}
           >
@@ -180,7 +182,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         <Col span={8}>
           {/* <Col  xs={24} sm={12} md={8} lg={6}> */}
           <Form.Item
-            label="First Name"
+            label={t('firstName')}
             name="firstName"
             rules={[
               { required: true, message: "Please enter your first name" },
@@ -192,7 +194,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={8}>
           <Form.Item
-            label="Middle Name"
+            label={t('middleName')}
             name="middleName"
             rules={[{ validator: validateName }]}
           >
@@ -204,7 +206,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={8}>
           <Form.Item
-            label="Last Name"
+            label={t('lastName')}
             name="lastName"
             rules={[
               { required: true, message: "Please enter your last name" },
@@ -223,7 +225,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
             <DatePicker format="DD/MM/YYYY" onChange={handleDatePickerChange} />
           </Form.Item> */}
           <Form.Item
-            label="Birth Date"
+            label={t('birthday')}
             name="birthday"
             rules={[{ required: true, message: "Please select birth date" }]}
           >
@@ -272,7 +274,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={8}>
           <Form.Item
-            label="Employment Date"
+            label="employmentDate"
             name="employmentDate"
             rules={[
               { required: true, message: "Please select employment date" },
@@ -305,7 +307,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={8}>
           <Form.Item
-            label="Position"
+            label={t('position')}
             name="position"
             rules={[{ required: true, message: "Please select your position" }]}
           >
@@ -329,7 +331,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={8}>
           <Form.Item
-            label="Department"
+            label={t('department')}
             name="department"
             rules={[
               { required: true, message: "Please select your department" },
@@ -354,7 +356,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={8}>
           <Form.Item
-            label="Ethnicity"
+            label={t('ethnicity')}
             name="ethnicity"
             rules={[
               {
@@ -381,7 +383,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="photo"
+            name={t('photo')}
             label="Photo"
             valuePropName="fileList"
             getValueFromEvent={(e: any) =>
@@ -396,7 +398,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={12}>
           <Form.Item
-            label="Gender"
+            label={t('gender')}
             name="gender"
             rules={[{ required: true, message: "Please select your gender" }]}
           >
@@ -412,7 +414,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            label="Phone Number"
+            label={t('phoneNumber')}
             name="phoneNumber"
             rules={[
               {
@@ -439,10 +441,10 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
                     required: true,
                     message: "Please enter your phone number",
                   },
-                  {
-                    pattern: /^[0-9]{9}$/,
-                    message: "Phone number must be exactly 9 digits",
-                  },
+                  // {
+                  //   pattern: /^[0-9]{9}$/,
+                  //   message: "Phone number must be exactly 9 digits",
+                  // },
                 ]}
               >
                 <Input style={{ width: "80%" }} />
@@ -453,7 +455,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
 
         <Col span={12}>
           <Form.Item
-            label="Email"
+            label={t('email')}
             name="email"
             rules={[{ required: true, message: "Please enter your email" }]}
           >
@@ -466,7 +468,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Form.Item
         label={
           <span style={{ fontWeight: "bold", fontSize: "16px" }}>
-            Current Address
+            {t('currentAddress')}
           </span>
         }
         // name="currentAddress"
@@ -474,7 +476,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         <>
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item label="Region" name={["currentAddress", "region"]}>
+              <Form.Item label={t('region')} name={["currentAddress", "region"]}>
                 <Select
                   options={Object.keys(data)?.map((region) => ({
                     label: region,
@@ -486,7 +488,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label="Zone/Subcity"
+                label={t('subcity')}
                 name={["currentAddress", "subcity"]}
               >
                 <Select
@@ -504,7 +506,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="Woreda" name={["currentAddress", "woreda"]}>
+              <Form.Item label={t('woreda')} name={["currentAddress", "woreda"]}>
                 <Select
                   options={
                     region && subcity
@@ -522,7 +524,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
-                label="House Number"
+                label={t('houseNumber')}
                 name={["currentAddress", "houseNumber"]}
               >
                 <Input />

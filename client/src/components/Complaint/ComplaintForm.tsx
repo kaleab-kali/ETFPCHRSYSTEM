@@ -1,10 +1,22 @@
 import React, { useState } from "react";
-import { Form, Select, Input, Button, Layout,Typography, Row, Col } from "antd";
-import ComplaintGif from "../../assets/techny-receiving-a-letter-or-email.gif"
+import {
+  Form,
+  Select,
+  Input,
+  Button,
+  Layout,
+  Typography,
+  Row,
+  Col,
+} from "antd";
+import ComplaintGif from "../../assets/techny-receiving-a-letter-or-email.gif";
 import { useCreateComplaint } from "../../services/mutations/complaintMutation";
+import { useComplaintforForm } from "../../services/queries/complaintQueries";
+
 const { Content } = Layout;
 const { Option } = Select;
 const { Title } = Typography;
+
 interface Complaint {
   category: string;
   complaint: string;
@@ -13,18 +25,31 @@ interface Complaint {
 
 const ComplaintForm: React.FC = () => {
   const [form] = Form.useForm();
+  const complaintForForm = useComplaintforForm();
   const [category, setCategory] = useState<string | undefined>(undefined);
-  const createComplaint= useCreateComplaint()
+  const createComplaint = useCreateComplaint();
+
   const handleSubmit = (values: Complaint) => {
     console.log("Submitted Complaint:", values);
-    // You can send the complaint data to your backend or perform any other action here
-    createComplaint.mutate(values)
+    createComplaint.mutate(values);
   };
 
   const handleCategoryChange = (value: string) => {
     setCategory(value);
     form.setFieldsValue({ complaint: undefined }); // Reset complaint field when category changes
   };
+
+  // Group complaints by category
+  const complaintsByCategory = complaintForForm.data?.reduce(
+    (acc: { [key: string]: any[] }, item: any) => {
+      if (!acc[item.category]) {
+        acc[item.category] = [];
+      }
+      acc[item.category].push(item);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <Layout>
@@ -86,27 +111,11 @@ const ComplaintForm: React.FC = () => {
                   placeholder="Select Category"
                   onChange={handleCategoryChange}
                 >
-                  <Option value="Conduct and Behavior">
-                    Conduct and Behavior
-                  </Option>
-                  <Option value="Performance and Duty-related">
-                    Performance and Duty-related
-                  </Option>
-                  <Option value="Rights Violations">Rights Violations</Option>
-                  <Option value="Policy and Procedure">
-                    Policy and Procedure
-                  </Option>
-                  <Option value="Communication and Interaction">
-                    Communication and Interaction
-                  </Option>
-                  <Option value="Training and Preparedness">
-                    Training and Preparedness
-                  </Option>
-                  <Option value="Integrity and Ethics">
-                    Integrity and Ethics
-                  </Option>
-                  <Option value="Miscellaneous">Miscellaneous</Option>
-                  {/* Add more categories here */}
+                  {Object.keys(complaintsByCategory || {}).map((category) => (
+                    <Option key={category} value={category}>
+                      {category}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -119,125 +128,12 @@ const ComplaintForm: React.FC = () => {
                 ]}
               >
                 <Select placeholder="Select Complaint">
-                  {/* Add complaints based on the selected category */}
-                  {category === "Conduct and Behavior" && (
-                    <>
-                      <Option value="Use of Excessive Force">
-                        Use of Excessive Force
+                  {category &&
+                    complaintsByCategory?.[category]?.map((complaint:any) => (
+                      <Option key={complaint._id} value={complaint.name}>
+                        {complaint.name}
                       </Option>
-                      <Option value="Harassment">Harassment</Option>
-                      <Option value="Discrimination">Discrimination</Option>
-                      <Option value="Abuse of Authority">
-                        Abuse of Authority
-                      </Option>
-                      <Option value="Inappropriate Behavior">
-                        Inappropriate Behavior
-                      </Option>
-                      <Option value="Intoxication on Duty">
-                        Intoxication on Duty
-                      </Option>
-                      <Option value="Lack of Respect">Lack of Respect</Option>
-                      {/* Add more complaints under "Conduct and Behavior" category */}
-                    </>
-                  )}
-                  {category === "Performance and Duty-related" && (
-                    <>
-                      <Option value="Negligence or Failure to Act">
-                        Negligence or Failure to Act
-                      </Option>
-                      <Option value="Inefficiency">Inefficiency</Option>
-                      <Option value="Failure to Respond to Emergencies">
-                        Failure to Respond to Emergencies
-                      </Option>
-                      <Option value="Improper Securing of Areas">
-                        Improper Securing of Areas
-                      </Option>
-                      <Option value="Inadequate Investigations">
-                        Inadequate Investigations
-                      </Option>
-                      {/* Add more complaints under "Performance and Duty-related" category */}
-                    </>
-                  )}
-                  {category === "Rights Violations" && (
-                    <>
-                      <Option value="Illegal Search and Seizure">
-                        Illegal Search and Seizure
-                      </Option>
-                      <Option value="Improper Detainment">
-                        Improper Detainment
-                      </Option>
-                      <Option value="Violation of Civil Rights">
-                        Violation of Civil Rights
-                      </Option>
-                      <Option value="Violation of Service Members' Rights">
-                        Violation of Service Members' Rights
-                      </Option>
-                      {/* Add more complaints under "Rights Violations" category */}
-                    </>
-                  )}
-                  {category === "Policy and Procedure" && (
-                    <>
-                      <Option value="Violation of SOPs">
-                        Violation of SOPs
-                      </Option>
-                      <Option value="Failure to Follow Protocol">
-                        Failure to Follow Protocol
-                      </Option>
-                      <Option value="Breach of Regulations">
-                        Breach of Regulations
-                      </Option>
-                      {/* Add more complaints under "Policy and Procedure" category */}
-                    </>
-                  )}
-                  {category === "Communication and Interaction" && (
-                    <>
-                      <Option value="Poor Communication">
-                        Poor Communication
-                      </Option>
-                      <Option value="Lack of Professionalism">
-                        Lack of Professionalism
-                      </Option>
-                      <Option value="Inappropriate Language or Conduct">
-                        Inappropriate Language or Conduct
-                      </Option>
-                      <Option value="Misuse of Equipment">
-                        Misuse of Equipment
-                      </Option>
-                      {/* Add more complaints under "Communication and Interaction" category */}
-                    </>
-                  )}
-                  {category === "Training and Preparedness" && (
-                    <>
-                      <Option value="Inadequate Training">
-                        Inadequate Training
-                      </Option>
-                      <Option value="Lack of Knowledge">
-                        Lack of Knowledge
-                      </Option>
-                      <Option value="Poor Skills Demonstration">
-                        Poor Skills Demonstration
-                      </Option>
-                      {/* Add more complaints under "Training and Preparedness" category */}
-                    </>
-                  )}
-                  {category === "Integrity and Ethics" && (
-                    <>
-                      <Option value="Dishonesty">Dishonesty</Option>
-                      <Option value="Corruption">Corruption</Option>
-                      <Option value="Bribery">Bribery</Option>
-                      {/* Add more complaints under "Integrity and Ethics" category */}
-                    </>
-                  )}
-                  {category === "Miscellaneous" && (
-                    <>
-                      <Option value="Personal Bias">Personal Bias</Option>
-                      <Option value="Favoritism">Favoritism</Option>
-                      <Option value="Conflict of Interest">
-                        Conflict of Interest
-                      </Option>
-                      {/* Add more complaints under "Miscellaneous" category */}
-                    </>
-                  )}
+                    ))}
                 </Select>
               </Form.Item>
             </Col>

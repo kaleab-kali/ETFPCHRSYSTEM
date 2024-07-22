@@ -4,9 +4,9 @@ import {
   useUpdateLeave,
   useDeleteLeave,
 } from "../../services/mutations/leaveMutation";
-import { message } from "antd";
+import { Button, message } from "antd";
 import { useAllSalaryRaises } from "../../services/queries/salaryRaiseQueries";
-import { useUpdateSalaryRaise } from "../../services/mutations/salaryRaiseMutation";
+import { useCreateSalaryRaise, useUpdateSalaryRaise } from "../../services/mutations/salaryRaiseMutation";
 import RewardsTable from "./RewardsTable";
 
 interface SalaryRaise {
@@ -22,6 +22,7 @@ interface SalaryRaise {
 
 const RewardsList = () => {
   const allSalaryRaise = useAllSalaryRaises();
+  const createSalary= useCreateSalaryRaise()
   console.log("All leaves " + allSalaryRaise?.data);
   const mappedSalaryRaise: SalaryRaise[] = allSalaryRaise.data
     ? allSalaryRaise.data.map((salaryR: SalaryRaiseType) => ({
@@ -54,6 +55,11 @@ const RewardsList = () => {
     }
 
   };
+  const handleButtonClick = () => {
+    createSalary.mutate();
+    console.log("Salary "+ createSalary.data)
+    // refetch()
+  };
 
   const handleReject = (id: string) => {
     const raiseIdToUpdate = id;
@@ -70,6 +76,9 @@ const RewardsList = () => {
     <>
       <h1 style={{ padding: "0 24px" }}>Salary Raise Approval</h1>
       <div style={{ padding: "24px" }}>
+        <Button onClick={handleButtonClick} style={{ marginLeft: 20 }}>
+          Display List
+        </Button>
         <RewardsTable
           data={mappedSalaryRaise}
           onReject={handleReject}

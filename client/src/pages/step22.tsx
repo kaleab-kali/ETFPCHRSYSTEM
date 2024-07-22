@@ -14,6 +14,7 @@ import { data } from "../utils/data";
 
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
+import { useTranslation } from "react-i18next";
 
 type EthiopiaData = {
   [region: string]: {
@@ -389,10 +390,10 @@ const Step2: React.FC<Step2Props> = ({ profileData, onChange }) => {
                     required: true,
                     message: "Please enter your phone number",
                   },
-                  {
-                    pattern: /^[0-9]{9}$/,
-                    message: "Phone number must be exactly 9 digits",
-                  },
+                  // {
+                  //   pattern: /^[0-9]{9}$/,
+                  //   message: "Phone number must be exactly 9 digits",
+                  // },
                 ]}
               >
                 <Input style={{ width: "80%" }} />

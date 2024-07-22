@@ -1,10 +1,11 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
 // Define roles enum
 enum Roles {
-  Staff = 'staff',
-  HRManager = 'hrmanager',
-  Admin = 'admin',
+  Staff = "staff",
+  HRManager = "hrmanager",
+  Admin = "admin",
+  Committee = "committee",
 }
 
 // Define interface for HRStaff document
@@ -38,5 +39,5 @@ const HRStaffSchema: Schema = new Schema({
 });
 
 // Create and export HRStaff model
-const HRStaff = mongoose.model<IHRStaff>('HRStaff', HRStaffSchema);
+const HRStaff = mongoose.model<IHRStaff>("HRStaff", HRStaffSchema);
 export default HRStaff;

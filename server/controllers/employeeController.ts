@@ -489,7 +489,7 @@ const changePasswordController = async (
     const { email, newPassword } = req.body;
 
     // Validate new password
-    if (newPassword.length < 12) {
+    if (newPassword.length < 8) {
       res
         .status(400)
         .json({ message: "Password must be at least 12 characters long" });
@@ -497,7 +497,7 @@ const changePasswordController = async (
     }
 
     const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!regex.test(newPassword)) {
       res
         .status(400)

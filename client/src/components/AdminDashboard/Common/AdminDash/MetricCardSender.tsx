@@ -20,10 +20,12 @@ import CalendarImage from "../../../../assets/CalendarImage.jpg";
 import AttendanceGraph from "../AttendanceGraph";
 import CalendarComponent from "../../../Calendar/Calendar";
 import "../../../../styles/Adminside/parentCardWrapper.css";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 
 const calculateMetrics = (data: EmployeeData[]) => {
+  
   const today = new Date().toISOString().split("T")[0];
   const totalEmployees = data.length;
   const presentEmployees = data.filter((employee) =>
@@ -61,6 +63,7 @@ const calculateMetrics = (data: EmployeeData[]) => {
 };
 
 const EmployeeMetrics = () => {
+  const {t} = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const employeesIdQuery = useEmployeesIds();
   const employeeQueries = useEmployees(employeesIdQuery.data);
@@ -91,7 +94,7 @@ const EmployeeMetrics = () => {
         <Flex vertical={false}>
           <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
-              title="Total Employees"
+              title={t('totalEmployee')}
               value={metrics.totalEmployees.toString()}
               percentage={metrics.totalPercentageChange}
               color="1"
@@ -99,7 +102,7 @@ const EmployeeMetrics = () => {
           </div>
           <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
-              title="Present"
+              title={t('present')}
               value={metrics.presentEmployees.toString()}
               percentage={metrics.presentPercentageChange}
               color="2"
@@ -107,7 +110,7 @@ const EmployeeMetrics = () => {
           </div>
           <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
-              title="On Leave"
+              title={t('onLeave')}
               value={metrics.employeesOnLeave.toString()}
               percentage={metrics.leavePercentageChange}
               color="3"
@@ -115,7 +118,7 @@ const EmployeeMetrics = () => {
           </div>
           <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
-              title="Absent"
+              title={t('absent')}
               value={metrics.absentEmployees.toString()}
               percentage={metrics.absentPercentageChange}
               color="4"
@@ -136,7 +139,7 @@ const EmployeeMetrics = () => {
       <div>
         <Flex>
           <Title level={5} style={{ marginTop: 0 }}>
-            Recent Activity
+            {t('recentActivity')}
           </Title>
           {/* three dot icon from antd */}
         </Flex>

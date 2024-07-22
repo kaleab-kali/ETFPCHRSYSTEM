@@ -8,7 +8,7 @@ import LoginPage from "./pages/Login/LoginPage";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import LoginEmployee from "./pages/LoginEmployee/LoginEmployee";
-import LoginPage2 from "./components/Common/LoginPage";
+import LoginPage2 from "./pages/Auth/LoginPage";
 import UnauthorizedPage from "./pages/UnAuthorized/UnauthorizedPage";
 import FirstEmployeePassword from "./pages/FirstEmployeePassword/FirstEmployeePassword";
 
@@ -33,6 +33,7 @@ function App() {
                   "admin",
                   "employee",
                   "department head",
+                  "committee",
                 ]}
               >
                 <Dashboard />
