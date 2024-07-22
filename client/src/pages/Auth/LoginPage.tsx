@@ -62,7 +62,7 @@ const LoginPage2: React.FC = () => {
   return (
     <Layout
       style={{
-        backgroundImage: "url(/main.webp)",
+        backgroundImage: "url(/1.webp)",
         height: "100vh",
         width: "100vw",
         backgroundSize: "cover",
@@ -94,7 +94,8 @@ const LoginPage2: React.FC = () => {
           <Col className="login-form-container" xs={24} md={12}>
             <Card
               bordered={false}
-              style={{ width: "60%",  }}
+              style={{ width: "60%", marginTop: 0}}
+              // title="Ethiopian Federal Prison Commission"
             >
               <Select
                 defaultValue="employee"
@@ -130,7 +131,7 @@ const LoginPage2: React.FC = () => {
                 >
                   <Input
                     placeholder="Enter the email"
-                    className="transparent-input"
+                    // className="transparent-input"
                   />
                 </Form.Item>
 
