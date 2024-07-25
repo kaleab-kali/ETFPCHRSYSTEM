@@ -148,6 +148,7 @@ const EmployeeDetailedProfilePage = () => {
           avatar="sda"
           role={selectedEmployee?.role}
           manager={selectedEmployee?.manager}
+          title={selectedEmployee?.title}
         />
         <Content
           style={{ display: "flex", flexDirection: "column", gap: "10px" }}

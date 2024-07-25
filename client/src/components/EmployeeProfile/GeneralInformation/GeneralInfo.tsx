@@ -149,7 +149,7 @@ function GeneralInfo({ selectedEmployee }: GeneralInformationProps) {
         return AssistantInspector;
       case "Chief Sergeant":
         return ChiefSergeant;
-      case "Sergent":
+      case "Sergeant":
         return Sergeant;
       case "Deputy Sergeant":
         return DeputySergeant;
