@@ -383,7 +383,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name={t('photo')}
+            name="photo"
             label="Photo"
             valuePropName="fileList"
             getValueFromEvent={(e: any) =>

@@ -62,7 +62,7 @@ const LoginPage2: React.FC = () => {
   return (
     <Layout
       style={{
-        backgroundImage: "url(/main.webp)",
+        backgroundImage: "url(/6.webp)",
         height: "100vh",
         width: "100vw",
         backgroundSize: "cover",
@@ -90,7 +90,8 @@ const LoginPage2: React.FC = () => {
         />
       </Header>
       <Content style={{ background: "transparent" }}>
-        <Row className="login-container" style={{ background: "transparent" }}>
+        <Title style = {{color: "white", textAlign: "center", backgroundColor: "blue", borderRadius: "2rem", width: "60%", marginLeft:"17rem", padding:"0.2rem 0"}}>የፌዴራል ማረሚያ ፖሊስ የሰው ሀብት ሲስተም ዳታ ቤዝ</Title>
+        <Row className="login-container" style={{ background: "transparent", marginTop: "-7rem"}}>
           <Col className="login-form-container" xs={24} md={12}>
             <Card
               bordered={false}
