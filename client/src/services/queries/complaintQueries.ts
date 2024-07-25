@@ -1,12 +1,12 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { getAllAppraisals, getAppraisalIds } from "../api/appraisalApi";
 import { getAllPerformances, getPerformance } from "../api/performanceApi";
-import { getAllComplaints, getEmployeeComplaintById } from "../api/complaintApi";
+import { getAllComplaints, getComplaintforForm, getEmployeeComplaintById } from "../api/complaintApi";
 
-export function useAppraisalIds() {
+export function useComplaintforForm() {
   return useQuery({
-    queryKey: ["aprraisal"],
-    queryFn: getAppraisalIds,
+    queryKey: ["complaintForm"],
+    queryFn: getComplaintforForm,
   });
 }
 export function useAllComplaints() {

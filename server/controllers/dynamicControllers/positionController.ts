@@ -42,8 +42,8 @@ const getAllPositions = async (req: Request, res: Response): Promise<void> => {
 
 const updatePosition = async (req: Request, res: Response): Promise<void> => {
   try {
-    const position = await PositionModel.findByIdAndUpdate(
-      req.params.id,
+    const position = await PositionModel.findOneAndUpdate(
+      {posId: req.params.id},
       { $set: req.body },
       { new: true }
     );

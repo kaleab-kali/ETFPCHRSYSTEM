@@ -1,8 +1,10 @@
+import { Appraisal } from './../../../shared/types/appraisalTypes.d';
 import i18n from "i18next";
 import { initReactI18next, Translation } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import EthnicityForm from "../components/Organization/Ethnicity/EthnicityForm";
 import PositionForm from "../components/Organization/Position/PositionForm";
+import { compileFunction } from "vm";
 
 // the translations
 // (tip move them in a JSON file and import them,
@@ -11,6 +13,11 @@ const resources = {
   am: {
     translation: {
       greeting: "ለምሳሌ እንኳን ደህና መጡ",
+      totalEmployee: "ጠቅላላ የሰራተኛ ብዛት ",
+      present: "በስራ ላይ የተገኘ",
+      absent: "በስራ ላይ ያልተገኘ",
+      onLeave: "ፍቃድ ላይ ያለ ",
+      reward: "እርከን",
       dashboard: "ዳሽቦርድ",
       leave: "ፈቃድ",
       attendance: "መገኘት",
@@ -46,11 +53,20 @@ const resources = {
       emergencyEmail: "አዲስ ኢሜል",
       emergencyAddress: "አዲስ አድራሻ",
       organizationName: "የፌዴራል ማረሚያ ቤት ኮሚሽን ",
+      appraisal: "ማዕረግ",
+      complaint: "ቅሬታ",
+      recentActivity: "የቅርብ ተግባራ",
+      
     },
   },
   en: {
     translation: {
       greeting: "Hello, welcome to the page",
+      totalEmployee: "Total Employee",
+      present: "Present",
+      absent: "Absent",
+      onLeave: "On Leave",
+      recentActivity: "Recent Activity",
       dashboard: "Dashboard",
       leave: "Leave",
       attendance: "Attendance",
@@ -87,6 +103,10 @@ const resources = {
       emergencyEmail: "Emergency Email",
       emergencyAddress: "Emergency Address",
       organizationName: "Federal Prison Commission",
+      complaint: "Complaint",
+      reward: "Reward",
+      appraisal: "Appraisal",
+      
 
       welcomeMessage: "Welcome to React and react-i18next",
     },

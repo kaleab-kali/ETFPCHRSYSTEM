@@ -53,6 +53,10 @@ import AddManagerToDepartmentForm from "../components/Organization/AddManagerToD
 import DepartmentManagerAssign from "./AdminDashboard/Organiazation/DepartmentManagerAssign";
 import AllStaff from "./Staff/AllStaff";
 import RewardsPage from "./Rewards/RewardsPage";
+import ServiceRewardPage from "./Rewards/ServiceRewardPage";
+import ComplaintList from "../components/Complaint/ComplaintList";
+import ComplaintEvidence from "../components/Complaint/ComplaintEvidence";
+import ComplaintTransfer from "../components/Complaint/ComlaintTransfer";
 
 const { Content } = Layout;
 
@@ -104,7 +108,9 @@ const Dashboard: React.FC = () => {
                   user?.role === "manager" ? (
                     <Navigate to={`/employee/view/${user.ObjId}`} replace />
                   ) : (
-                    <ProtectedRoute roles={["admin", "hrmanager", "staff"]}>
+                    <ProtectedRoute
+                      roles={["admin", "hrmanager", "staff", "committee"]}
+                    >
                       <HRDashboard />
                     </ProtectedRoute>
                   )
@@ -126,7 +132,9 @@ const Dashboard: React.FC = () => {
               <Route
                 path="/profile"
                 element={
-                  <ProtectedRoute roles={["hrmanager", "admin", "staff"]}>
+                  <ProtectedRoute
+                    roles={["hrmanager", "admin", "staff", "committee"]}
+                  >
                     {/* <ProfilePage /> */}
                     <Profile />
                   </ProtectedRoute>
@@ -432,14 +440,24 @@ const Dashboard: React.FC = () => {
                   }
                 />
               </Route>
-              <Route
-                path="/reward"
-                element={
-                  <ProtectedRoute roles={["hrmanager"]}>
-                    <RewardsList />
-                  </ProtectedRoute>
-                }
-              ></Route>
+              <Route path="/reward">
+                <Route
+                  path="salaryRaiseTable"
+                  element={
+                    <ProtectedRoute roles={["hrmanager"]}>
+                      <RewardsList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="serviceRewardTable"
+                  element={
+                    <ProtectedRoute roles={["hrmanager"]}>
+                      <ServiceRewardPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
               <Route path="/complaint">
                 <Route
                   path="complaintForm"
@@ -452,6 +470,7 @@ const Dashboard: React.FC = () => {
                         "employee",
                         "manager",
                         "admin",
+                        "committee",
                       ]}
                     >
                       <ComplaintForm />{" "}
@@ -459,10 +478,42 @@ const Dashboard: React.FC = () => {
                   }
                 />
                 <Route
+                  path="complaintList"
+                  element={
+                    <ProtectedRoute
+                      roles={["hrmanager", "committee", "admin", "staff"]}
+                    >
+                      <ComplaintList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="complaintEvidence"
+                  element={
+                    <ProtectedRoute
+                      roles={["hrmanager", "committee", "admin", "staff"]}
+                    >
+                      <ComplaintEvidence />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
                   path="complaintHistory"
                   element={
-                    <ProtectedRoute roles={["hrmanager", "admin", "staff"]}>
+                    <ProtectedRoute
+                      roles={["hrmanager", "committee", "admin", "staff"]}
+                    >
                       <ComplaintHistory />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="complaintTransfer"
+                  element={
+                    <ProtectedRoute
+                      roles={["hrmanager", "department head", "admin", "staff", "manager"]}
+                    >
+                      <ComplaintTransfer />
                     </ProtectedRoute>
                   }
                 />

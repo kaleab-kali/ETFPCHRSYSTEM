@@ -71,6 +71,7 @@ const Header: React.FC = () => {
   // const {user}= useAuth()
   const employee = useEmployeeProfile();
   const profile = employee.data;
+  console.log("emolyee data", profile);
   const navigate = useNavigate();
 
   const showLogoutConfirm = () => {

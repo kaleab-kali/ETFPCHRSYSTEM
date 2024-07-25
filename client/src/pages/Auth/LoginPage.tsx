@@ -95,7 +95,8 @@ const LoginPage2: React.FC = () => {
           <Col className="login-form-container" xs={24} md={12}>
             <Card
               bordered={false}
-              style={{ width: "60%",  }}
+              style={{ width: "60%", marginTop: 0}}
+              // title="Ethiopian Federal Prison Commission"
             >
               <Select
                 defaultValue="employee"
@@ -131,7 +132,7 @@ const LoginPage2: React.FC = () => {
                 >
                   <Input
                     placeholder="Enter the email"
-                    className="transparent-input"
+                    // className="transparent-input"
                   />
                 </Form.Item>
 
