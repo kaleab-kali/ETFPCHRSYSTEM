@@ -6,7 +6,7 @@ const getProfile = async (req: Request, res: Response): Promise<Response> => {
   try {
     const user = req.user;
 
-    if (user.role === 'admin' || user.role === 'hrmanager' || user.role === 'staff') {
+    if (user.role === 'admin' || user.role === 'hrmanager' || user.role === 'staff' || user.role === "committee") {
       const hrStaff = await HRStaff.findById(user._id);
       if (!hrStaff) {
         return res.status(404).json({ message: 'User not found' });

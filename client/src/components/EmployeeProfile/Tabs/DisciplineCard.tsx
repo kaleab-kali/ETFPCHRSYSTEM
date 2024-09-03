@@ -146,6 +146,7 @@ const DisciplineCard: React.FC<DisciplineCardProps> = ({ complaint }) => {
             getValueFromEvent={(e: any) =>
               Array.isArray(e) ? e : e && e.fileList
             }
+
             rules={[{ required: true, message: "Please upload a file!" }]}
           >
             <Upload name="file" beforeUpload={() => false}>

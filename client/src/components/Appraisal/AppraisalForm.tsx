@@ -20,6 +20,7 @@ import {
   useEmployeesIds,
 } from "../../services/queries/employeeQueries";
 import { useCreateNewAppraisal } from "../../services/mutations/appraisalMutation";
+import { useAllAppraisal } from "../../services/queries/appraisaQueries";
 import PerformanceGif from "../../assets/Performance overview.gif";
 import { EmployeeData } from "../../../../shared/types/employeeTypes";
 
@@ -53,7 +54,9 @@ const ApprasialForm: React.FC = () => {
   const [employeeData, setEmployeeData] = useState<any>(null);
   const [searchInput, setSearchInput] = useState("");
   const [totalValue, setTotalValue] = useState(Number);
-  const createAppraisal = useCreateNewAppraisal();
+  const createAppraisal=useCreateNewAppraisal()
+  const appraisalQuery = useAllAppraisal();
+
 
   const handleDatePickerChange = (
     date: moment.Moment | null,
@@ -107,7 +110,7 @@ const ApprasialForm: React.FC = () => {
   const filteredEmployeeData = employeeQueries?.filter((employee: any) =>
     employee?.data?.empId?.includes(searchInput)
   );
-
+  console.log("filtered employee data: ", +filteredEmployeeData)
   return (
     <Layout>
       <Title
@@ -130,19 +133,7 @@ const ApprasialForm: React.FC = () => {
           borderRadius: "30px",
         }}
       >
-        <div>
-          <img
-            src={PerformanceGif}
-            alt="trip"
-            width="500px"
-            height="540px"
-            style={{
-              borderTopLeftRadius: "30px",
-              borderBottomLeftRadius: "30px",
-              marginTop: "4px",
-            }}
-          />
-        </div>
+        
         <Form
           form={form}
           style={{
@@ -190,10 +181,21 @@ const ApprasialForm: React.FC = () => {
                           ) {
                             form.setFieldsValue({
                               workEfficiency: item.data?.evaluations[0].total,
+                              behaviour:item.data?.evaluations[0].total,
+                              attitude: item.data?.evaluations[0].total,
+                              service: item.data?.evaluations[0].total * 0.6,
+                              
+
                             });
                           } else {
                             form.setFieldsValue({
                               workEfficiency: 0,
+                              behaviour:0,
+                              attitude: 0,
+                              service: 0,
+                              disciplinary: 0,
+
+
                             });
                           }
                         }}
@@ -227,7 +229,11 @@ const ApprasialForm: React.FC = () => {
                     message: "Please input your current level!",
                   },
                 ]}
-              >
+              > 
+              {/* {filteredEmployeeData.map((employee: any) => 
+              return{
+
+              }} */}
                 <Select>
                   {aplevels.map((level) => (
                     <Option key={level} value={level}>
@@ -295,7 +301,7 @@ const ApprasialForm: React.FC = () => {
                   },
                 ]}
               >
-                <Input type="number" min={0} max={15} />
+                <Input disabled={true} type="number" min={0} max={15} />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -309,7 +315,7 @@ const ApprasialForm: React.FC = () => {
                   },
                 ]}
               >
-                <Input type="number" min={0} max={25} />
+                <Input disabled={true} type="number" min={0} max={25} />
               </Form.Item>
             </Col>
           </Row>
@@ -353,7 +359,7 @@ const ApprasialForm: React.FC = () => {
                   },
                 ]}
               >
-                <Input type="number" min={0} max={25} />
+                <Input disabled={true} type="number" min={0} max={25} />
               </Form.Item>
             </Col>
           </Row>
@@ -367,6 +373,19 @@ const ApprasialForm: React.FC = () => {
           </Form.Item>
           <div>Total Score: {totalScore}</div>
         </Form>
+        <div>
+          <img
+            src={PerformanceGif}
+            alt="trip"
+            width="500px"
+            height="540px"
+            style={{
+              borderTopLeftRadius: "30px",
+              borderBottomLeftRadius: "30px",
+              marginTop: "4px",
+            }}
+          />
+        </div>
       </Content>
     </Layout>
   );

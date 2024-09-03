@@ -5,12 +5,12 @@ import Dashboard from "./pages/Dashboard";//?
 import EmployeeProfilePage from "./pages/EmployeeProfile/EmployeeProfilePage";
 import EmployeeRegistrationPage from "./pages/EmployeeRegistration/EmployeeRegistrationPage";
 import LoginPage from "./pages/Login/LoginPage";
-import { AuthProvider } from "./context/AuthContext";//?
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";//?
-import LoginEmployee from "./pages/LoginEmployee/LoginEmployee";//?
-import LoginPage2 from "./components/Common/LoginPage";//?
-import UnauthorizedPage from "./pages/UnAuthorized/UnauthorizedPage";//?
-import FirstEmployeePassword from "./pages/FirstEmployeePassword/FirstEmployeePassword";//?
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import LoginEmployee from "./pages/LoginEmployee/LoginEmployee";
+import LoginPage2 from "./pages/Auth/LoginPage";
+import UnauthorizedPage from "./pages/UnAuthorized/UnauthorizedPage";
+import FirstEmployeePassword from "./pages/FirstEmployeePassword/FirstEmployeePassword";
 
 function App() {
   return (

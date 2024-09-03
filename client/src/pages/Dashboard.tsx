@@ -37,7 +37,7 @@ import AddressInfoPage from "./AdminDashboard/Organiazation/AddressInfoPage";
 import AttendanceDashboard from "../components/Attendance/AttendanceDashboard";
 import ProfilePage from "./AdminDashboard/Profile";
 import LeaveDashboard from "../components/AdminDashboard/LeaveManagement/LeaveDashboard";
-import LoginPage from "../components/Common/LoginPage";
+import LoginPage from "./Auth/LoginPage";
 import AttendanceSheetTable from "../components/Attendance/AttendanceSheetTable";
 import HRDashboard from "../components/AdminDashboard/Common/AdminDash/HRDashboard";
 import EvidenceReview from "../components/Attendance/AbsentPermission";

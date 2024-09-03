@@ -79,6 +79,7 @@ const PersonCard: React.FC<Person> = ({ empId, firstName, lastName, position, st
     }
   };
 
+
   return (
     <Card
       style={{
