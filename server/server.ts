@@ -18,6 +18,7 @@ import notificationsRouter from './routes/notificationRoutes';
 import titleRoute from './routes/subRoutes/titleRoute'
 import instituteRoute from './routes/subRoutes/instituteRoute'
 import positionRoute from './routes/subRoutes/positionRoute'
+import documentRoute from "./routes/documentRoutes";
 // import regionRoute from "./routes/subRoutes/reginonRoute";
 import addressRoute from "./routes/subRoutes/addressRoute";
 // import regionRoute from "./routes/subRoutes/reginonRoute";
@@ -75,7 +76,7 @@ app.use("/position",positionRoute)
 app.use("/institute",instituteRoute)
 // app.use("/region",regionRoute);
 app.use("/address", addressRoute);
-
+app.use("/documents", documentRoute);
 
 cron.schedule("20 16 * * *", async () => {
   try {

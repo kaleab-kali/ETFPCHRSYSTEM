@@ -18,6 +18,8 @@ import LeaveHistoryTab from "./Tabs/LeaveHistoryTab";
 import AppraisalTab from "./Tabs/AppraisalTab";
 import DiscplineTab from "./Tabs/DisciplineTab";
 import DisciplineTab from "./Tabs/DisciplineTab";
+import DocumentTrackingPage from "./Tabs/DocumentTrackingPage";
+import EthiopianDatePicker from "./Tabs/Dateddf";
 
 interface EmployeeLeave {
   leave: LeaveInfo
@@ -130,6 +132,24 @@ const EmployeeDetailedProfilePage = () => {
                 Discipline
               </NavLink>
             </Item>
+            {/* <Item key="cal">
+              <NavLink
+                className="link"
+                to={`/employee/view/${id}/cal`}
+                style={{ color: "grey", padding: "0 10px" }}
+              >
+                Calendar
+              </NavLink>
+            </Item> */}
+            <Item key="documentTracking">
+              <NavLink
+                className="link"
+                to={`/employee/view/${id}/documentTracking`}
+                style={{ color: "grey", padding: "0 10px" }}
+              >
+                Document
+              </NavLink>
+            </Item>
           </Menu>
         </div>
       </div>
@@ -196,6 +216,13 @@ const EmployeeDetailedProfilePage = () => {
               path="/discipline"
               element={<DisciplineTab selectedEmployee={selectedEmployee} />}
             />
+            <Route
+              path="/documentTracking"
+              element={
+                <DocumentTrackingPage selectedEmpId={selectedEmployee.empId} />
+              }
+            />
+            {/* <Route path="/cal" element={<EthiopianDatePicker />} /> */}
           </Routes>
         </Content>
       </div>
