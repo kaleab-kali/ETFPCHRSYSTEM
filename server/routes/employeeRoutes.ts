@@ -15,6 +15,7 @@ import {
   forgotPasswordRequest,
   passwordResetApprove,
   resetPassword,
+  deactivateEmployee,
 
 } from "../controllers/employeeController";
 import enforcePasswordChange from "../middleware/enforcePasswordChange";
@@ -67,5 +68,9 @@ router.post("/evaluation/:id", authDepartmentUserProtect, checkManagerOrDepartme
 
 // Get a specific evaluation by employee ID
 router.get("/evaluation/:id", getEvaluationByEmployeeId);
+
+// deactivate an employee by ID
+router.put("/deactivate/:employeeId", authAdminProtect, checkHrManagerRole, deactivateEmployee);
+
 
 export default router;

@@ -18,6 +18,7 @@ import LeaveHistoryTab from "./Tabs/LeaveHistoryTab";
 import AppraisalTab from "./Tabs/AppraisalTab";
 import DiscplineTab from "./Tabs/DisciplineTab";
 import DisciplineTab from "./Tabs/DisciplineTab";
+import HealthTab from "./Tabs/HealthTab";
 
 interface EmployeeLeave {
   leave: LeaveInfo
@@ -130,6 +131,15 @@ const EmployeeDetailedProfilePage = () => {
                 Discipline
               </NavLink>
             </Item>
+            <Item key="health">
+              <NavLink
+                className="link"
+                to={`/employee/view/${id}/health`}
+                style={{ color: "grey", padding: "0 10px" }}
+              >
+                health
+              </NavLink>
+            </Item>
           </Menu>
         </div>
       </div>
@@ -195,6 +205,10 @@ const EmployeeDetailedProfilePage = () => {
             <Route
               path="/discipline"
               element={<DisciplineTab selectedEmployee={selectedEmployee} />}
+            />
+            <Route
+              path="/health"
+              element={<HealthTab selectedEmployee={selectedEmployee} />}
             />
           </Routes>
         </Content>
