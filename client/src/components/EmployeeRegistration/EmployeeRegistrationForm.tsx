@@ -111,8 +111,6 @@ const EmployeeRegistrationForm: React.FC = () => {
 
         // Update the employee's photo field with the path
         await handleFormData({ ...values, photo: fileName });
-
-        // Trigger the GraphQL mutation with the updated formData
         createEmployeeMutuation.mutate({
           ...formData,
           photo: fileName,

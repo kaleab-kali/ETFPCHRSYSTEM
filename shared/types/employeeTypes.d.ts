@@ -178,6 +178,7 @@ export interface EmployeeData {
   leaveInfo?: LeaveInfo;
   role: Roles;
   manager?: string;
+  status?: string;
   evaluations?: EvaluationData[];
   attendanceRecords: IAttendance[];
   leaveBalances?: [

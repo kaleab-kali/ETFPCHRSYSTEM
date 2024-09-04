@@ -113,13 +113,29 @@ export const updateEmployee = async (data: EmployeeData) => {
   }
 };
 
-export const deleteEmployee = async (id: string) => {
+// export const deleteEmployee = async (id: string, status: string) => {
+//   try {
+//     await fetchWithAuth(`${BASE_URL}/employees/${id}`, {
+//       method: "DELETE",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ status }),
+//     });
+//   } catch (error) {
+//     handleError(error);
+//   }
+// };
+
+export const deactivateEmployee = async (data: {id: string, status: string, reason: string}) => {
+  console.log("Data before mutation delete:", data);
   try {
-    await fetchWithAuth(`${BASE_URL}/employees/${id}`, {
-      method: "DELETE",
+    await fetchWithAuth(`${BASE_URL}/employees/${data.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(data.reason),
     });
   } catch (error) {
     handleError(error);

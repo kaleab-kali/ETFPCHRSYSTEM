@@ -366,6 +366,7 @@ const createEmployee = async (req: Request, res: Response): Promise<void> => {
       password: hashedOTP,
       leaveBalances,
       photo: req.file?.path,
+      status: "active",
     });
 
     // Check the security
@@ -396,6 +397,35 @@ const createEmployee = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+const deactivateEmployee = async (req: Request, res: Response): Promise<void> => {
+  console.warn("reacehed backend");
+  try {
+    const { employeeId } = req.params;
+    const { reason } = req.body;
+
+    if (!reason) {
+      res.status(400).json({ message: "Deactivation reason is required" });
+      return;
+    }
+
+    const employee = await Employee.findOne({empId : employeeId});
+    if (!employee) {
+      res.status(404).json({ message: "Employee not found" });
+      return;
+    }
+
+    employee.status = "inactive";
+    employee.deactivationReason = reason;
+    await employee.save();
+
+    res.status(200).json({ message: "Employee deactivated successfully", employee });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 
 const loginController = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -980,4 +1010,5 @@ export {
   forgotPasswordRequest,
   passwordResetApprove,
   resetPassword,
+  deactivateEmployee,
 };

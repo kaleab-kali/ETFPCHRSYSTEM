@@ -27,13 +27,16 @@
 
 
 .login-container {
-  height: 100vh;
+  /* height: 100vh; */
   display: flex;
   align-items: center;
   justify-content: center;
   background: #f0f2f5;
 }
-
+.ant-modal-content {
+  border-radius: 20px !important;
+  /* background: red; */
+}
 .login-form-container {
   display: flex;
   align-items: center;

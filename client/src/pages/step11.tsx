@@ -11,6 +11,7 @@ import { useAllTitles } from "../services/queries/titleQueries";
 import { UploadChangeParam } from "antd/lib/upload";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { EthDateTime } from "ethiopian-calendar-date-converter";
 
 const { Option } = Select;
 
@@ -39,11 +40,28 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
   const [subcity, setSubcity] = useState<string | null>(null);
   const [woreda, setWoreda] = useState<string | null>(null);
   const [toDate, setToDate] = useState<dayjs.Dayjs | null>(null);
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+const [ethiopianDate, setEthiopianDate] = useState<string | null>(null);
+const [ethiopianEmplDate, setEthiopianEmplDate] = useState<string | null>(null);
 
   const positionDataQueries = useAllPositions();
   const departmentDataQueries = useAllDepartments();
   const titleDataQueries = useAllTitles();
-
+const amharicMonths = [
+  "መስከረም",
+  "ጥቅምት",
+  "ኅዳር",
+  "ታኅሳስ",
+  "ጥር",
+  "የካቲት",
+  "መጋቢት",
+  "ሚያዝያ",
+  "ግንቦት",
+  "ሰኔ",
+  "ሐምሌ",
+  "ነሐሴ",
+  "ጳጉሜን",
+];
   const positionSource = positionDataQueries.data
     ? positionDataQueries.data.map((queryResult: PositionInfo) => {
         return {
@@ -128,15 +146,49 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
   // ) => {
   //   form.setFieldsValue({ birthday: date }); // Set the moment object directly
   // };
-  const handleDatePickerChange = (
-    date: dayjs.Dayjs | null,
-    dateString: string | string[]
-  ) => {
-    setToDate(date);
-    form.setFieldsValue({ birthday: date });
-  };
-  
+  // const handleDatePickerChange = (
+  //   date: dayjs.Dayjs | null,
+  //   dateString: string | string[]
+  // ) => {
+  //   setToDate(date);
+  //   form.setFieldsValue({ birthday: date });
+  // };
+    const handleDatePickerChange = (date: dayjs.Dayjs | null) => {
+      setSelectedDate(date);
+      form.setFieldsValue({ birthday: date });
 
+      // Convert to Ethiopian date
+      if (date) {
+        const correctedDate = date.clone().add(1, "day");
+
+        const ethDate = EthDateTime.fromEuropeanDate(correctedDate.toDate());
+        const monthIndex = ethDate.month - 1; // Convert to zero-based index
+
+        const amharicMonthName = amharicMonths[monthIndex];
+        const amharicDate = `${ethDate.date} ${amharicMonthName} ${ethDate.year}`;
+        setEthiopianDate(amharicDate);
+      } else {
+        setEthiopianDate(null);
+      }
+    };
+    const handleEmployeementDatePickerChange = (date: dayjs.Dayjs | null) => {
+      setSelectedDate(date);
+      form.setFieldsValue({ birthday: date });
+
+      // Convert to Ethiopian date
+      if (date) {
+const correctedDate = date.clone().add(1, "day");
+
+        const ethDate = EthDateTime.fromEuropeanDate(correctedDate.toDate());
+        const monthIndex = ethDate.month - 1; // Convert to zero-based index
+
+        const amharicMonthName = amharicMonths[monthIndex];
+        const amharicDate = `${ethDate.date} ${amharicMonthName} ${ethDate.year}`;
+        setEthiopianEmplDate(amharicDate);
+      } else {
+        setEthiopianEmplDate(null);
+      }
+    };
   return (
     <Form
       layout="vertical"
@@ -148,7 +200,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         <Col span={8}>
           {/* <Col  xs={24} sm={12} md={8} lg={6}> */}
           <Form.Item
-            label={t('title')}
+            label={t("title")}
             name="title"
             rules={[{ required: true, message: "Please select a title" }]}
           >
@@ -182,7 +234,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         <Col span={8}>
           {/* <Col  xs={24} sm={12} md={8} lg={6}> */}
           <Form.Item
-            label={t('firstName')}
+            label={t("firstName")}
             name="firstName"
             rules={[
               { required: true, message: "Please enter your first name" },
@@ -194,7 +246,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={8}>
           <Form.Item
-            label={t('middleName')}
+            label={t("middleName")}
             name="middleName"
             rules={[{ validator: validateName }]}
           >
@@ -206,7 +258,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={8}>
           <Form.Item
-            label={t('lastName')}
+            label={t("lastName")}
             name="lastName"
             rules={[
               { required: true, message: "Please enter your last name" },
@@ -216,16 +268,9 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
             <Input />
           </Form.Item>
         </Col>
-        <Col span={8}>
-          {/* <Form.Item
-            label="Birthday"
-            name="birthday"
-            rules={[{ required: true, message: "Please select a date!" }]}
-          >
-            <DatePicker format="DD/MM/YYYY" onChange={handleDatePickerChange} />
-          </Form.Item> */}
+        {/* <Col span={8}>
           <Form.Item
-            label={t('birthday')}
+            label={t("birthday")}
             name="birthday"
             rules={[{ required: true, message: "Please select birth date" }]}
           >
@@ -245,32 +290,33 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
               }}
             />
           </Form.Item>
-          {/* <Form.Item
-            label="Birthday"
+          
+        </Col> */}
+        <Col span={8}>
+          <Form.Item
+            label={t("birthday")}
             name="birthday"
-            rules={[{ required: true, message: "Please select a date!" }]}
+            rules={[{ required: true, message: "Please select birth date" }]}
           >
             <DatePicker
               format="DD/MM/YYYY"
-              onChange={(date) => {
-                const formattedDate = date
-                  ? dayjs(date).format("D/M/YYYY")
-                  : null;
-                form.setFieldsValue({ birthday: formattedDate });
+              onChange={handleDatePickerChange}
+              disabledDate={(current) => {
+                const eighteenYearsAgo = dayjs().subtract(18, "years");
+                return (
+                  current &&
+                  (current.isAfter(dayjs().endOf("day")) ||
+                    current.isAfter(eighteenYearsAgo.endOf("day")))
+                );
               }}
             />
-          </Form.Item> */}
-
-          {/* <Form.Item
-            label="Birthday"
-            name="birthday"
-            rules={[{ required: true, message: "Please select your birthday" }]}
-          >
-            <DatePicker
-              style={{ width: "100%" }}
-              onChange={() => handleDatePickerChange}
-            />
-          </Form.Item> */}
+          </Form.Item>
+          {ethiopianDate && (
+            <div>
+              <strong>{t("Ethiopian Date")}: </strong>
+              <span>{ethiopianDate}</span>
+            </div>
+          )}
         </Col>
         <Col span={8}>
           <Form.Item
@@ -282,14 +328,18 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
           >
             <DatePicker
               format="DD/MM/YYYY"
-              onChange={(date, dateString) => {
-                console.log(date, dateString);
-              }}
+              onChange={handleEmployeementDatePickerChange}
               disabledDate={(current) => {
                 // Disable future dates
                 return current && current.isAfter(dayjs().endOf("day"));
               }}
             />
+            {ethiopianEmplDate && (
+              <div>
+                <strong>{t("Ethiopian Date")}: </strong>
+                <span>{ethiopianEmplDate}</span>
+              </div>
+            )}
           </Form.Item>
           {/* <Form.Item
             label="Employment Date"
@@ -307,7 +357,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={8}>
           <Form.Item
-            label={t('position')}
+            label={t("position")}
             name="position"
             rules={[{ required: true, message: "Please select your position" }]}
           >
@@ -331,7 +381,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={8}>
           <Form.Item
-            label={t('department')}
+            label={t("department")}
             name="department"
             rules={[
               { required: true, message: "Please select your department" },
@@ -356,7 +406,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={8}>
           <Form.Item
-            label={t('ethnicity')}
+            label={t("ethnicity")}
             name="ethnicity"
             rules={[
               {
@@ -383,7 +433,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name={t('photo')}
+            name="photo"
             label="Photo"
             valuePropName="fileList"
             getValueFromEvent={(e: any) =>
@@ -398,7 +448,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         </Col>
         <Col span={12}>
           <Form.Item
-            label={t('gender')}
+            label={t("gender")}
             name="gender"
             rules={[{ required: true, message: "Please select your gender" }]}
           >
@@ -414,7 +464,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            label={t('phoneNumber')}
+            label={t("phoneNumber")}
             name="phoneNumber"
             rules={[
               {
@@ -455,7 +505,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
 
         <Col span={12}>
           <Form.Item
-            label={t('email')}
+            label={t("email")}
             name="email"
             rules={[{ required: true, message: "Please enter your email" }]}
           >
@@ -468,7 +518,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
       <Form.Item
         label={
           <span style={{ fontWeight: "bold", fontSize: "16px" }}>
-            {t('currentAddress')}
+            {t("currentAddress")}
           </span>
         }
         // name="currentAddress"
@@ -476,7 +526,10 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
         <>
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item label={t('region')} name={["currentAddress", "region"]}>
+              <Form.Item
+                label={t("region")}
+                name={["currentAddress", "region"]}
+              >
                 <Select
                   options={Object.keys(data)?.map((region) => ({
                     label: region,
@@ -488,7 +541,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
             </Col>
             <Col span={8}>
               <Form.Item
-                label={t('subcity')}
+                label={t("subcity")}
                 name={["currentAddress", "subcity"]}
               >
                 <Select
@@ -506,7 +559,10 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label={t('woreda')} name={["currentAddress", "woreda"]}>
+              <Form.Item
+                label={t("woreda")}
+                name={["currentAddress", "woreda"]}
+              >
                 <Select
                   options={
                     region && subcity
@@ -524,7 +580,7 @@ const Step1: React.FC<Step1Props> = ({ profileData, onChange }) => {
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
-                label={t('houseNumber')}
+                label={t("houseNumber")}
                 name={["currentAddress", "houseNumber"]}
               >
                 <Input />

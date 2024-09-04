@@ -14,6 +14,7 @@ const resources = {
     translation: {
       greeting: "ለምሳሌ እንኳን ደህና መጡ",
       totalEmployee: "ጠቅላላ የሰራተኛ ብዛት ",
+      inactive: "የሄደ ሰራተኛ",
       present: "በስራ ላይ የተገኘ",
       absent: "በስራ ላይ ያልተገኘ",
       onLeave: "ፍቃድ ላይ ያለ ",
@@ -72,7 +73,7 @@ const resources = {
       attendance: "Attendance",
       employee: "Employee",
       department: "Department",
-
+      inactive: "inactive",
       list: "List",
       organization: "Organization",
       request: "Request",

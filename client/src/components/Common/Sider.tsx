@@ -220,6 +220,15 @@ const Sider: React.FC<SiderProps> = ({
                   <NavLink to="/employee/view">{t('list')}</NavLink>
                 </Menu.Item>
               )}
+              {user?.role !== "committee" && (
+                <Menu.Item
+                  key="employeedeactiveView"
+                  icon={<IoListOutline size={20} />}
+                  onClick={() => handleMenuClick("employeeDeactiveView")}
+                >
+                  <NavLink to="/employee/deactiveEmployee">{t('inactive')}</NavLink>
+                </Menu.Item>
+              )}
               {/* )} */}
               {/* <Menu.Item
                 key="employeeEdit"

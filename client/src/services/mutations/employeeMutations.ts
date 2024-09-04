@@ -7,7 +7,8 @@ import { EmployeeData } from "../../../../shared/types/employeeTypes";
 import {
   createEmployee,
   createUpload,
-  deleteEmployee,
+  // deleteEmployee,
+  deactivateEmployee,
   updateEmployee,
 } from "../api/employeeApi";
 import { message } from "antd";
@@ -112,9 +113,9 @@ export function useDeleteEmployee() {
   const { setLoading } = useLoading();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => {
+    mutationFn: (data: {id: string, status: string, reason: string}) => {
       setLoading(true);
-      return deleteEmployee(id);
+      return deactivateEmployee(data);
     },
     onError: (error: any) => {
       console.log("error");

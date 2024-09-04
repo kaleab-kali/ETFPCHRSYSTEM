@@ -90,7 +90,7 @@ const EmployeeMetrics = () => {
       style={{ display: "flex", justifyContent: "start" }}
       align="flex-start"
     >
-      <Flex vertical style={{ display: "flex", justifyContent: "start" }}>
+      <Flex vertical style={{ display: "flex", justifyContent: "start", gap:"20px"}}>
         <Flex vertical={false}>
           <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
             <MetricCard
@@ -125,6 +125,42 @@ const EmployeeMetrics = () => {
             />
           </div>
         </Flex>
+      
+        <Flex vertical={false}>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
+            <MetricCard
+              title="ቃሊቲ ማረሚያ ማዕከል"
+              value="5"
+              percentage={metrics.totalPercentageChange}
+              color="1"
+            />
+          </div>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
+            <MetricCard
+              title="ቀጠሮ ማረፊያ ማዕከል"
+              value="4"
+              percentage={metrics.presentPercentageChange}
+              color="2"
+            />
+          </div>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
+            <MetricCard
+              title="ሴቶች ማረሚያ ማዕከል"
+              value="7"
+              percentage={metrics.leavePercentageChange}
+              color="3"
+            />
+          </div>
+          <div className="parentCardWrapper" style={{ marginRight: "15px" }}>
+            <MetricCard
+              title="ድሬዳዋ ማረሚያ ማዕከል"
+              value="10"
+              percentage={metrics.absentPercentageChange}
+              color="4"
+            />
+          </div>
+        </Flex>
+        
         <div
           style={{
             backgroundColor: "white",
@@ -135,6 +171,7 @@ const EmployeeMetrics = () => {
           <AttendanceGraph />
         </div>
       </Flex>
+      
 
       <div>
         <Flex>

@@ -4,7 +4,6 @@ import {
   Input,
   Button,
   Select,
-  DatePicker,
   Row,
   Col,
   Layout,
@@ -22,11 +21,29 @@ import {
 } from "../../services/queries/employeeQueries";
 import { useCreateNewAppraisal } from "../../services/mutations/appraisalMutation";
 import { useAllAppraisal } from "../../services/queries/appraisaQueries";
-import PerformanceGif from "../../assets/Performance overview.gif"
+import PerformanceGif from "../../assets/Performance overview.gif";
 import { EmployeeData } from "../../../../shared/types/employeeTypes";
+
 const { Content } = Layout;
 const { Option } = Select;
 const { Title } = Typography;
+
+const aplevels = [
+  "Constable",
+  "Assistant Sergeant",
+  "Deputy Sergeant",
+  "Sergeant",
+  "Chief Sergeant",
+  "Assistant Inspector",
+  "Deputy Inspector",
+  "Inspector",
+  "Chief Inspector",
+  "DeputyCommander",
+  "Commander",
+  "Assistant Commissioner",
+  "Deputy Commissioner",
+  "Commissioner General",
+];
 
 const ApprasialForm: React.FC = () => {
   const [totalScore, setTotalScore] = useState(0);
@@ -41,14 +58,14 @@ const ApprasialForm: React.FC = () => {
   const appraisalQuery = useAllAppraisal();
 
 
-  console.log(employeeQueries[0])
   const handleDatePickerChange = (
     date: moment.Moment | null,
     dateString: string
   ) => {
     form.setFieldsValue({ promotionDate: date }); // Set the moment object directly
   };
-  function onFinish(values: any): void {
+
+  const onFinish = (values: any): void => {
     const {
       education,
       service,
@@ -65,7 +82,7 @@ const ApprasialForm: React.FC = () => {
       parseInt(workEfficiency) -
       parseInt(disciplinary);
     setTotalScore(total);
-  
+
     const evalData = {
       currentLevel: values.currentLevel,
       nextLevel: values.desiredLevel,
@@ -80,19 +97,16 @@ const ApprasialForm: React.FC = () => {
         disciplinary: values.disciplinary,
       },
       totalScore: total,
-      
       status: "pending",
     };
-    // const selectedEmployee=
-    console.log("valuessssssssss" + evalData);
+
     createAppraisal.mutate(evalData);
-  }
+  };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(e.target.value); // Update search input state
-  console.log(employeeQueries.length);
-
+    setSearchInput(e.target.value);
   };
+
   const filteredEmployeeData = employeeQueries?.filter((employee: any) =>
     employee?.data?.empId?.includes(searchInput)
   );
@@ -153,23 +167,16 @@ const ApprasialForm: React.FC = () => {
                     renderItem={(item, index) => (
                       <List.Item
                         onClick={() => {
-                          console.log("Clicked employee ID:", item.data?.empId);
                           form.setFieldsValue({
                             employeeId: item.data?.empId,
                             currentLevel: item.data?.title,
+                            desiredLevel: item.data?.title,
                             position: item.data?.position,
-
                           });
-                          console.log(
-                            "Form values after setting:",
-                            form.getFieldsValue()
-                          );
-                          const str = item.data?.empId;
                           setSearchInput("");
                           if (
                             item.data?.evaluations &&
                             item.data?.evaluations.length > 0 &&
-                            item.data?.evaluations[0] && // Check if evaluations[0] exists
                             item.data?.evaluations[0].total
                           ) {
                             form.setFieldsValue({
@@ -228,20 +235,11 @@ const ApprasialForm: React.FC = () => {
 
               }} */}
                 <Select>
-                  <Option value="Constable">ኮንስታብል</Option>
-                  <Option value="Assistant Sergeant">ረዳት ሳጅን</Option>
-                  <Option value="Deputy Sergeant">ምክትል ሳጅን</Option>
-                  <Option value="Sergeant">ሳጅን</Option>
-                  <Option value="Chief Sergeant">ዋና ሳጅን</Option>
-                  <Option value="Assistant Inspector">ረዳት ኢንስፔክተር</Option>
-                  <Option value="Deputy Inspector">ምክትል ኢንስፔክተር</Option>
-                  <Option value="Inspector">ኢንስፔክተር</Option>
-                  <Option value="Chief Inspector">ዋና ኢንስፔክተር</Option>
-                  <Option value="DeputyCommander">ምክትል ኮማንደር</Option>
-                  <Option value="Commander">ኮማንደር</Option>
-                  <Option value="Assistant Commissioner">ረዳት ኮሚሽነር</Option>
-                  <Option value="Deputy Commissioner">ምክትል ኮሚሽነር</Option>
-                  <Option value="Commissioner General">ኮሚሽነር ጀነራል</Option>
+                  {aplevels.map((level) => (
+                    <Option key={level} value={level}>
+                      {level}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -252,24 +250,16 @@ const ApprasialForm: React.FC = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your current level!",
+                    message: "Please input your desired level!",
                   },
                 ]}
               >
                 <Select>
-                  <Option value="Assistant Sergeant">ረዳት ሳጅን</Option>
-                  <Option value="Deputy Sergeant">ምክትል ሳጅን</Option>
-                  <Option value="Sergeant">ሳጅን</Option>
-                  <Option value="Chief Sergeant">ዋና ሳጅን</Option>
-                  <Option value="Assistant Inspector">ረዳት ኢንስፔክተር</Option>
-                  <Option value="Deputy Inspector">ምክትል ኢንስፔክተር</Option>
-                  <Option value="Inspector">ኢንስፔክተር</Option>
-                  <Option value="Chief Inspector">ዋና ኢንስፔክተር</Option>
-                  <Option value="DeputyCommander">ምክትል ኮማንደር</Option>
-                  <Option value="Commander">ኮማንደር</Option>
-                  <Option value="Assistant Commissioner">ረዳት ኮሚሽነር</Option>
-                  <Option value="Deputy Commissioner">ምክትል ኮሚሽነር</Option>
-                  <Option value="Commissioner General">ኮሚሽነር ጀነራል</Option>
+                  {aplevels.map((level) => (
+                    <Option key={level} value={level}>
+                      {level}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
             </Col>
@@ -334,10 +324,6 @@ const ApprasialForm: React.FC = () => {
               <Form.Item
                 label="Work Efficiency (25)"
                 name="workEfficiency"
-                // initialValue={
-                //   filteredEmployeeData.length > 0 ? totalValue
-                //     : undefined
-                // }
                 rules={[
                   {
                     required: true,
@@ -345,7 +331,6 @@ const ApprasialForm: React.FC = () => {
                   },
                 ]}
               >
-                {/* Render the Work Efficiency field as text */}
                 <Input disabled={true} type="number" min={0} max={25} />
               </Form.Item>
             </Col>

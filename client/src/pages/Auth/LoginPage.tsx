@@ -62,7 +62,7 @@ const LoginPage2: React.FC = () => {
   return (
     <Layout
       style={{
-        backgroundImage: "url(/1.webp)",
+        backgroundImage: "url(/6.webp)",
         height: "100vh",
         width: "100vw",
         backgroundSize: "cover",
@@ -83,19 +83,21 @@ const LoginPage2: React.FC = () => {
           src={process.env.PUBLIC_URL + "/fpp.jpg"}
           alt="Company Logo"
           style={{
-            height: "70px",
+            height: "100px",
             borderRadius: "50%",
             marginLeft: 30,
+            marginTop:30,
           }}
         />
       </Header>
-      <Content style={{ background: "transparent" }}>
-        <Row className="login-container" style={{ background: "transparent" }}>
+      <Content style={{ background: "transparent", }}>
+        {/* <Title style = {{color: "white", textAlign: "center", backgroundColor: "blue", borderRadius: "2rem", width: "60%", marginLeft:"17rem", padding:"0.2rem 0"}}>የፌዴራል ማረሚያ ፖሊስ የሰው ሀብት ሲስተም ዳታ ቤዝ</Title> */}
+        <Row className="login-container" style={{ background: "transparent", marginTop: "50px", paddingTop: "0px"}}>
           <Col className="login-form-container" xs={24} md={12}>
             <Card
               bordered={false}
-              style={{ width: "60%", marginTop: 0}}
-              // title="Ethiopian Federal Prison Commission"
+              style={{ width: "60%",}}
+              title="የፌዴራል ማረሚያ ፖሊስ የሰው ሀብት ሲስተም ዳታ ቤዝ"
             >
               <Select
                 defaultValue="employee"
