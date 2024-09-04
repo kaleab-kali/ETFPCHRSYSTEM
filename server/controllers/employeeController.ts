@@ -401,7 +401,8 @@ const createEmployee = async (req: Request, res: Response): Promise<void> => {
 const deactivateEmployee = async (req: Request, res: Response): Promise<void> => {
   console.warn("reacehed backend");
   try {
-    const { employeeId } = req.params;
+    const { _id } = req.params;
+    // const { employeeId } = req.params;
     const { reason } = req.body;
 
     if (!reason) {
@@ -409,7 +410,8 @@ const deactivateEmployee = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    const employee = await Employee.findOne({empId : employeeId});
+    // const employee = await Employee.findOne({empId : employeeId});
+    const employee = await Employee.findById(_id);
     if (!employee) {
       res.status(404).json({ message: "Employee not found" });
       return;

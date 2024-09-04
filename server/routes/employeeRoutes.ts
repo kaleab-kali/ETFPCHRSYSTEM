@@ -70,7 +70,8 @@ router.post("/evaluation/:id", authDepartmentUserProtect, checkManagerOrDepartme
 router.get("/evaluation/:id", getEvaluationByEmployeeId);
 
 // deactivate an employee by ID
-router.put("/deactivate/:employeeId", authAdminProtect, checkHrManagerRole, deactivateEmployee);
+// router.put("/deactivate/:employeeId", authAdminProtect, checkHrManagerRole, deactivateEmployee);
+router.put("/deactivate/:id", authAdminProtect, checkHrManagerRole, deactivateEmployee);
 
 
 export default router;

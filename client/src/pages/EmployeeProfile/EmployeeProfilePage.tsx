@@ -314,6 +314,7 @@ const EmployeeProfilePage: React.FC = () => {
   const filteredData = Array.isArray(data)
     ? data.filter((employee) => {
         return (
+          (employee.status?.toLowerCase() === "active") &&
           (!selectedDepartment || employee.department === selectedDepartment) &&
           (employee.firstName
             ?.toLowerCase()

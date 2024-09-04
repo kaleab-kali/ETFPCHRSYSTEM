@@ -130,7 +130,7 @@ export const updateEmployee = async (data: EmployeeData) => {
 export const deactivateEmployee = async (data: {id: string, status: string, reason: string}) => {
   console.log("Data before mutation delete:", data);
   try {
-    await fetchWithAuth(`${BASE_URL}/employees/${data.id}`, {
+    await fetchWithAuth(`${BASE_URL}/employees/deactivate/${data.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
