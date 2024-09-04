@@ -24,6 +24,19 @@ import dayjs from "dayjs";
 import moment from "moment";
 import { useMutationWithStatus } from "../UpdateHooks/useMutationWithStatus";
 import { useAuth } from "../../../context/AuthContext";
+import CommissionerGeneral from "../../../assets/CommissionerGeneral.jpg"
+import DeputyCommissioner from "../../../assets/DeputyCommissioner.jpg"
+import AssistantCommissioner from "../../../assets/AssistantCommissioner.jpg"
+import Commander from "../../../assets/Commander.jpg"
+import DeputyCommander from "../../../assets/DeputyCommander.jpg"
+import ChiefInspector from "../../../assets/ChiefInspector.jpg"
+import Inspector from "../../../assets/Inspector.jpg"
+import DeputyInspector from "../../../assets/DeputyInspector.jpg"
+import AssistantInspector from "../../../assets/AssistantInspector.jpg"
+import ChiefSergeant from "../../../assets/ChiefSergeant.jpg"
+import Sergeant from "../../../assets/Sergeant.jpg"
+import DeputySergeant from "../../../assets/DeputySergeant.jpg"
+import AssistantSergeant from "../../../assets/AssistantSergeant.jpg"
 
 interface GeneralInformationProps {
   selectedEmployee?: EmployeeData;
@@ -114,6 +127,39 @@ function GeneralInfo({ selectedEmployee }: GeneralInformationProps) {
     }
   };
 
+  const getImageSrc = (title:string) => {
+    switch (title) {
+      case "Commissioner General":
+        return CommissionerGeneral;
+      case "Deputy Commissioner":
+        return DeputyCommissioner;
+      case "Assistant Commissioner":
+        return AssistantCommissioner;
+      case "Commander":
+        return Commander;
+      case "Deputy Commander":
+        return DeputyCommander;
+      case "Chief Inspector":
+        return ChiefInspector;
+      case "Inspector":
+        return Inspector;
+      case "Deputy Inspector":
+        return DeputyInspector;
+      case "Assistant Inspector":
+        return AssistantInspector;
+      case "Chief Sergeant":
+        return ChiefSergeant;
+      case "Sergeant":
+        return Sergeant;
+      case "Deputy Sergeant":
+        return DeputySergeant;
+      case "Assistant Sergeant":
+        return AssistantSergeant;
+      default:
+        return ""; // You can provide a default image or return an empty string
+    }
+  };
+
   return (
     <div className="">
       {contextHolder}
@@ -123,7 +169,16 @@ function GeneralInfo({ selectedEmployee }: GeneralInformationProps) {
           <Title style={{ fontSize: 14 }} type="secondary">
             Title
           </Title>
-          <Title style={{ fontSize: 16 }}>{selectedEmployee?.title}</Title>
+          <Title style={{ fontSize: 16 }}>
+            {selectedEmployee?.title}{" "}
+            {selectedEmployee?.title && (
+              <img
+                src={getImageSrc(selectedEmployee.title)}
+                alt={selectedEmployee.title}
+                style={{ width: 20, height: 20, marginLeft: 8 }}
+              />
+            )}
+          </Title>
         </Col>
         <Col span={6} className=" -space-y-2">
           <Title style={{ fontSize: 14 }} type="secondary">
@@ -197,16 +252,15 @@ function GeneralInfo({ selectedEmployee }: GeneralInformationProps) {
           <Title style={{ fontSize: 16 }}>{selectedEmployee?.salary}</Title>
         </Col>
       </Row>
-      {(user?.role==="staff" || user?.role==="hrmanager")&&(
-
-      <Button
-        type="primary"
-        icon={<EditOutlined />}
-        onClick={handleToggleGeneralEditModal}
-        className=" float-right bg-blue-500"
-      >
-        Edit
-      </Button>
+      {(user?.role === "staff" || user?.role === "hrmanager") && (
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          onClick={handleToggleGeneralEditModal}
+          className=" float-right bg-blue-500"
+        >
+          Edit
+        </Button>
       )}
       <Modal
         title="Edit General Information"

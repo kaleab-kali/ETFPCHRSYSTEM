@@ -57,6 +57,7 @@ import ServiceRewardPage from "./Rewards/ServiceRewardPage";
 import ComplaintList from "../components/Complaint/ComplaintList";
 import ComplaintEvidence from "../components/Complaint/ComplaintEvidence";
 import ComplaintTransfer from "../components/Complaint/ComlaintTransfer";
+import EmployeeDeactivatePage from "./EmployeeProfile/EmployeeDeactivatePage";
 
 const { Content } = Layout;
 
@@ -127,8 +128,6 @@ const Dashboard: React.FC = () => {
                   </ProtectedRoute>
                 }
               ></Route>
-              {/* <Route path="/" element={<EmployeeForm />}></Route> */}
-              {/* <Route path="/" element={<HRDashboard />}></Route> */}
               <Route
                 path="/profile"
                 element={
@@ -140,8 +139,6 @@ const Dashboard: React.FC = () => {
                   </ProtectedRoute>
                 }
               ></Route>
-
-              {/* <Route path="/login" element={<LoginPage />}></Route> */}
 
               <Route path="/organization">
                 <Route
@@ -293,7 +290,7 @@ const Dashboard: React.FC = () => {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="edit" element={<EmployeeInfoEditPage />} />
+                <Route path="deactiveEmployee" element={<EmployeeDeactivatePage />} />
               </Route>
               <Route path="/leave">
                 <Route

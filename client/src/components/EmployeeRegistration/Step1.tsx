@@ -88,8 +88,6 @@ const Step1: React.FC<Step1Props> = ({ form, nextStep,formData, handleFormData }
    const handlePhotoChange = (info: { file: RcFile }) => {
      const file = info.file;
      handleFormData({ ...formData, file }); // Pass the file along with other form data
-
-     // Optionally, you can perform additional client-side actions related to the file
    };
 
    
@@ -268,7 +266,7 @@ const Step1: React.FC<Step1Props> = ({ form, nextStep,formData, handleFormData }
                 return false; // Prevent default behavior (auto-upload)
               }}
               showUploadList={false}
-              action="http://localhost:8000/uploads" // Specify the server endpoint for file upload
+              action="http://localhost:8000/uploads" //  the server endpoint for file upload
             >
               <Button icon={<UploadOutlined />}>Click to upload</Button>
             </Upload>

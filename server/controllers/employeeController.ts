@@ -399,6 +399,7 @@ const createEmployee = async (req: Request, res: Response): Promise<void> => {
 };
 
 const deactivateEmployee = async (req: Request, res: Response): Promise<void> => {
+  console.warn("reacehed backend");
   try {
     const { employeeId } = req.params;
     const { reason } = req.body;

@@ -39,7 +39,6 @@
 //   const depHead = useDepartmentHeadEmployee(user?.employeeId || "");
 //   const manager = useManagerEmployee(user?.employeeId || "");
 
- 
 //   const depData = departmentsQuery.data
 //   ? departmentsQuery.data.map((queryResult: DepartmentInfo) => {
 //       return {
@@ -118,7 +117,7 @@
 //       dataIndex: "position",
 //       key: "position",
 //       sorter: (a: Employee, b: Employee) =>
-//         a.position.localeCompare(b.position), 
+//         a.position.localeCompare(b.position),
 //     },
 //     {
 //       title: "Department",
@@ -191,7 +190,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Input, Select, Space, Table, Typography } from "antd";
+import { Button, Input, Select, Space, Table, Typography, Modal } from "antd";
 import "../../styles/EmployeeProfilePage.css";
 import {
   useAllEmployees,
@@ -213,34 +212,68 @@ interface Employee {
   lastName: string;
   position: string;
   department: string;
+  status: string;
 }
 
 const EmployeeProfilePage: React.FC = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [deleteReason, setDeleteReason] = useState("");
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
+    null
+  );
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const deleteEmployeeMutation = useDeleteEmployee();
   const departmentsQuery = useAllDepartments();
 
-  const handleDelete = (key: string) => {
-    deleteEmployeeMutation.mutate(key);
+  const handleDelete = (employeeId: string) => {
+    console.warn("Delete employee:", employeeId);
+    setSelectedEmployeeId(employeeId);
+    setIsModalVisible(true);
+  };
+
+  // const handleDelete = (key: string) => {
+  //   deleteEmployeeMutation.mutate(key);
+  // };
+
+  const handleConfirmDelete = () => {
+    const deactiveEmployee = {
+      id: selectedEmployeeId ?? "",
+      status: "inactive",
+      reason: deleteReason,
+    };
+    
+    if (selectedEmployeeId && deleteReason) {
+      deleteEmployeeMutation.mutate(deactiveEmployee);
+    }
+
+    setIsModalVisible(false);
+    setDeleteReason("");
+    setSelectedEmployeeId(null);
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalVisible(false);
+    setDeleteReason("");
+    setSelectedEmployeeId(null);
   };
 
   const employeesQuery = useAllEmployees();
   const depHead = useDepartmentHeadEmployee(user?.employeeId || "");
   const manager = useManagerEmployee(user?.employeeId || "");
 
- 
   const depData = departmentsQuery.data
-  ? departmentsQuery.data.map((queryResult: DepartmentInfo) => {
-      return {
-        departmentID: queryResult.departmentID,
-        departmentName: queryResult.departmentName,
-        departmentHead: queryResult.departmentHead,
-      };
-    })
-  : [];
-  console.log("departmentn data",depData);
+    ? departmentsQuery.data.map((queryResult: DepartmentInfo) => {
+        return {
+          departmentID: queryResult.departmentID,
+          departmentName: queryResult.departmentName,
+          departmentHead: queryResult.departmentHead,
+        };
+      })
+    : [];
+  console.log("departmentn data", depData);
 
   const employees =
     user?.role === "department head"
@@ -257,8 +290,6 @@ const EmployeeProfilePage: React.FC = () => {
     string | undefined
   >(undefined);
 
-
-
   const handleDepartmentChange = (value: string) => {
     setSelectedDepartment(value);
   };
@@ -266,31 +297,33 @@ const EmployeeProfilePage: React.FC = () => {
   const handleSearch = (value: string) => {
     setSearchText(value);
   };
-useEffect(() => {
-  if (Array.isArray(dataSource)) {
-    setData(dataSource);
-  } else {
-    console.warn("dataSource is not an array:", dataSource);
-    setData([]);
-  }
-}, [dataSource]);
 
-useEffect(() => {
-  console.log("Data:", data);
-}, [data]);
+  useEffect(() => {
+    if (Array.isArray(dataSource)) {
+      setData(dataSource);
+    } else {
+      console.warn("dataSource is not an array:", dataSource);
+      setData([]);
+    }
+  }, [dataSource]);
 
-const filteredData = Array.isArray(data)
-  ? data.filter((employee) => {
-      return (
-        (!selectedDepartment || employee.department === selectedDepartment) &&
-        (employee.firstName
-          ?.toLowerCase()
-          .includes(searchText?.toLowerCase()) ||
-          employee.lastName?.toLowerCase().includes(searchText?.toLowerCase()))
-      );
-    })
-  : [];
+  useEffect(() => {
+    console.log("Data:", data);
+  }, [data]);
 
+  const filteredData = Array.isArray(data)
+    ? data.filter((employee) => {
+        return (
+          (!selectedDepartment || employee.department === selectedDepartment) &&
+          (employee.firstName
+            ?.toLowerCase()
+            .includes(searchText?.toLowerCase()) ||
+            employee.lastName
+              ?.toLowerCase()
+              .includes(searchText?.toLowerCase()))
+        );
+      })
+    : [];
 
   const columns: ColumnsType = [
     {
@@ -324,7 +357,7 @@ const filteredData = Array.isArray(data)
       dataIndex: "position",
       key: "position",
       sorter: (a: Employee, b: Employee) =>
-        a.position.localeCompare(b.position), 
+        a.position.localeCompare(b.position),
     },
     {
       title: "Department",
@@ -334,7 +367,7 @@ const filteredData = Array.isArray(data)
         { text: "PoliceComission", value: "PoliceComission" },
         { text: "Transport", value: "Transport" },
         { text: "Finance", value: "Finance" },
-        // Add other departments here
+       
       ],
       onFilter: (value: any, record: any) => {
         return record.department === value;
@@ -373,13 +406,21 @@ const filteredData = Array.isArray(data)
       </div>
       <div className="tableBlock">
         <Space style={{ marginBottom: 16 }}>
-        <Select placeholder="Select a department" onChange={handleDepartmentChange} style={{width: 200}} allowClear>
-              {depData.map((department) => (
-                <Option key={department.departmentID} value={department.departmentName}>
-                  {department.departmentName}
-                </Option>
-              ))}
-            </Select>
+          <Select
+            placeholder="Select a department"
+            onChange={handleDepartmentChange}
+            style={{ width: 200 }}
+            allowClear
+          >
+            {depData.map((department) => (
+              <Option
+                key={department.departmentID}
+                value={department.departmentName}
+              >
+                {department.departmentName}
+              </Option>
+            ))}
+          </Select>
           <Input
             placeholder="Search by name"
             value={searchText}
@@ -389,9 +430,29 @@ const filteredData = Array.isArray(data)
         </Space>
         <Table columns={columns} dataSource={filteredData} />
       </div>
+      <Modal
+        title="Confirm Deletion"
+        open={isModalVisible}
+        onOk={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        okButtonProps={{ disabled: !deleteReason }} 
+      >
+        <p>Please select a reason for deletion:</p>
+        <Select
+          placeholder="Select a reason"
+          value={deleteReason}
+          onChange={(value) => setDeleteReason(value)}
+          style={{ width: "100%" }}
+        >
+          <Option value="Resigned">Resigned</Option>
+          <Option value="Terminated">Terminated</Option>
+          <Option value="Contract Ended">Contract Ended</Option>
+          <Option value="Other">Other</Option>
+        </Select>
+      </Modal>
+      ;
     </>
   );
 };
 
 export default EmployeeProfilePage;
-

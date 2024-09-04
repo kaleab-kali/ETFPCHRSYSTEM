@@ -1,92 +1,172 @@
 import React, { useState, useEffect } from "react";
-import {
-  Layout,
-  Typography,
-  Button,
-  Modal,
-  Form,
-  InputNumber,
-  Row,
-  Col,
-  Table,
-} from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { useCreatePerformance } from "../../../services/mutations/performanceMutation";
-import { EmployeeData } from "../../../../../shared/types/employeeTypes";
-import { usePerformaces } from "../../../services/queries/performanceQueries";
-import { EvaluationData } from "../../../../../shared/types/performaceTypes";
-import { useAuth } from "../../../context/AuthContext";
+import { Layout, Typography, Collapse, Table } from "antd";
+import { ColumnsType } from "antd/lib/table";
 
-interface EmployeeId {
-  selectedEmployee?: EmployeeData;
+const { Title } = Typography;
+const { Content } = Layout;
+const { Panel } = Collapse;
+
+interface MedicalHistory {
+  date: string;
+  healthIssue: string;
+  treatment: string;
+  doctor: string;
 }
 
-const HealthTab = ({ selectedEmployee }: EmployeeId) => {
-  const [form] = Form.useForm();
-  const [modalVisible, setModalVisible] = useState(false);
-  const { Title } = Typography;
-  const { Content } = Layout;
-  const performance = useCreatePerformance();
-  const fetchedEmployeePerformances = usePerformaces(selectedEmployee?.empId);
-  const [performanceData, setPerformanceData] = useState<EvaluationData[]>([]);
-  const {user}=useAuth()
+interface HealthRecord {
+  key: string;
+  date?: string;
+  bloodType?: string;
+  healthIssue: string;
+  costOfCoverage: string;
+  name?: string;
+  age?: number;
+  medicalHistory?: MedicalHistory[];
+}
+
+interface EmployeeId {
+  selectedEmployee?: any; // Replace `any` with a proper type if available
+}
+
+const HealthTab: React.FC<EmployeeId> = ({ selectedEmployee }) => {
+  const [personalHealthData, setPersonalHealthData] = useState<HealthRecord[]>([]);
+  const [wifeHealthData, setWifeHealthData] = useState<HealthRecord[]>([]);
+  const [childrenHealthData, setChildrenHealthData] = useState<HealthRecord[]>([]);
+
   useEffect(() => {
-    const data = fetchedEmployeePerformances.data;
-    if (Array.isArray(data) && data.length > 0) {
-      console.log(data[0]);
-      setPerformanceData(data);
-    } else if (selectedEmployee?.evaluations) {
-      setPerformanceData(selectedEmployee.evaluations);
-    }
-    console.log(data);
-  }, [fetchedEmployeePerformances.data, selectedEmployee?.evaluations]);
+    // Fetch or initialize health data here
+    setPersonalHealthData([
+      {
+        key: "1",
+        date: "2024-01-15",
+        bloodType: "A+",
+        healthIssue: "Hypertension",
+        costOfCoverage: "$1500",
+      },
+    ]);
 
-  const onFinish = (values: any) => {
-    console.log(selectedEmployee?.department);
-    values.employeeId = selectedEmployee?.empId;
-    console.log(values);
-    performance.mutate(values);
-    setModalVisible(false);
-  };
+    setWifeHealthData([
+      {
+        key: "1",
+        date: "2024-02-20",
+        bloodType: "B+",
+        healthIssue: "Diabetes",
+        costOfCoverage: "$2000",
+      },
+    ]);
 
-  const showModal = () => {
-    setModalVisible(true);
-  };
+    setChildrenHealthData([
+      {
+        key: "1",
+        name: "John",
+        age: 16,
+        healthIssue: "Asthma",
+        costOfCoverage: "$1200",
+        medicalHistory: [
+          {
+            date: "2023-06-01",
+            healthIssue: "Asthma",
+            treatment: "Inhaler prescription",
+            doctor: "Dr. Smith",
+          },
+          {
+            date: "2022-12-10",
+            healthIssue: "Seasonal Flu",
+            treatment: "Flu shot",
+            doctor: "Dr. Brown",
+          },
+        ],
+      },
+      {
+        key: "2",
+        name: "Anna",
+        age: 19,
+        healthIssue: "Allergy",
+        costOfCoverage: "$0",
+        medicalHistory: [
+          {
+            date: "2024-01-20",
+            healthIssue: "Allergy",
+            treatment: "Antihistamines",
+            doctor: "Dr. Johnson",
+          },
+        ],
+      },
+    ]);
+  }, []);
 
-  const handleCancel = () => {
-    setModalVisible(false);
-  };
+  const personalColumns: ColumnsType<HealthRecord> = [
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+    },
+    {
+      title: "Blood Type",
+      dataIndex: "bloodType",
+      key: "bloodType",
+    },
+    {
+      title: "Health Issue",
+      dataIndex: "healthIssue",
+      key: "healthIssue",
+    },
+    {
+      title: "Cost of Coverage",
+      dataIndex: "costOfCoverage",
+      key: "costOfCoverage",
+    },
+  ];
 
-  const columns = [
+  const childrenColumns: ColumnsType<HealthRecord> = [
     {
-      title: "Work Quality (out of 20)",
-      dataIndex: "workQuality",
-      key: "workQuality",
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: "Productivity (out of 20)",
-      dataIndex: "productivity",
-      key: "productivity",
+      title: "Age",
+      dataIndex: "age",
+      key: "age",
     },
     {
-      title: "Communication (out of 20)",
-      dataIndex: "communication",
-      key: "communication",
+      title: "Health Issue",
+      dataIndex: "healthIssue",
+      key: "healthIssue",
     },
     {
-      title: "Collaboration (out of 20)",
-      dataIndex: "collaboration",
-      key: "collaboration",
+      title: "Cost of Coverage",
+      dataIndex: "",
+      key: "costOfCoverage",
+      render: (_, record) =>
+        record.age !== undefined && record.age > 18 ? (
+          <span style={{ color: "red" }}>Not Eligible for Coverage</span>
+        ) : (
+          record.costOfCoverage
+        ),
+    },
+  ];
+
+  const medicalHistoryColumns: ColumnsType<MedicalHistory> = [
+    {
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
     },
     {
-      title: "Punctuality (out of 20)",
-      dataIndex: "punctuality",
-      key: "punctuality",
+      title: "Health Issue",
+      dataIndex: "healthIssue",
+      key: "healthIssue",
     },
     {
-      title: "Year",
-      dataIndex: "evaluationYear",
-      key: "year",
+      title: "Treatment",
+      dataIndex: "treatment",
+      key: "treatment",
+    },
+    {
+      title: "Doctor",
+      dataIndex: "doctor",
+      key: "doctor",
     },
   ];
 
@@ -97,113 +177,54 @@ const HealthTab = ({ selectedEmployee }: EmployeeId) => {
           display: "flex",
           backgroundColor: "white",
           padding: 20,
-          position: "relative",
           flexDirection: "column",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <h2>Recent Performance</h2>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={performanceData}
-          pagination={false}
-          size="middle"
-          bordered
-        />
-        {(user?.role === "department head" || user?.role === "manager") && selectedEmployee?.empId!==user?.employeeId && (
-          <Button
-            type="primary"
-            shape="circle"
-            size="large"
-            icon={<PlusOutlined />}
-            style={{
-              position: "absolute",
-              bottom: 20,
-              right: 20,
-            }}
-            onClick={showModal}
-          />
-        )}
-
-        <Modal
-          title="Rate Performance"
-          open={modalVisible}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <Form form={form} onFinish={onFinish} layout="vertical">
-            <Form.Item
-              name="employeeId"
-              hidden
-              initialValue={selectedEmployee?.empId}
-            >
-              <InputNumber style={{ display: "none" }} />
-            </Form.Item>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="workQuality"
-                  label="Work Quality (out of 20)"
-                  rules={[{ required: true, message: "Please rate!" }]}
-                >
-                  <InputNumber min={0} max={20} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="productivity"
-                  label="Productivity (out of 20)"
-                  rules={[{ required: true, message: "Please rate!" }]}
-                >
-                  <InputNumber min={0} max={20} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="communication"
-                  label="Communication (out of 20)"
-                  rules={[{ required: true, message: "Please rate!" }]}
-                >
-                  <InputNumber min={0} max={20} />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="collaboration"
-                  label="Collaboration (out of 20)"
-                  rules={[{ required: true, message: "Please rate!" }]}
-                >
-                  <InputNumber min={0} max={20} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  name="punctuality"
-                  label="Punctuality (out of 20)"
-                  rules={[{ required: true, message: "Please rate!" }]}
-                >
-                  <InputNumber min={0} max={20} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
+        <Title level={2}>Health Information</Title>
+        <Collapse accordion>
+          <Panel header="Personal" key="1">
+            <Table
+              columns={personalColumns}
+              dataSource={personalHealthData}
+              pagination={false}
+              size="middle"
+              bordered
+            />
+          </Panel>
+          <Panel header="Wife" key="2">
+            <Table
+              columns={personalColumns}
+              dataSource={wifeHealthData}
+              pagination={false}
+              size="middle"
+              bordered
+            />
+          </Panel>
+          <Panel header="Children" key="3">
+            <Table
+              columns={childrenColumns}
+              dataSource={childrenHealthData}
+              pagination={false}
+              size="middle"
+              bordered
+              expandable={{
+                expandedRowRender: (record) =>
+                  record.medicalHistory ? (
+                    <Table
+                      columns={medicalHistoryColumns}
+                      dataSource={record.medicalHistory}
+                      pagination={false}
+                      size="small"
+                      bordered
+                    />
+                  ) : (
+                    <p>No medical history available.</p>
+                  ),
+                rowExpandable: (record) => !!record.medicalHistory,
+              }}
+            />
+          </Panel>
+        </Collapse>
       </Content>
     </Layout>
   );

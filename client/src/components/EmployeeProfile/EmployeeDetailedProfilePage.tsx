@@ -19,9 +19,11 @@ import AppraisalTab from "./Tabs/AppraisalTab";
 import DiscplineTab from "./Tabs/DisciplineTab";
 import DisciplineTab from "./Tabs/DisciplineTab";
 import HealthTab from "./Tabs/HealthTab";
+import DocumentTrackingPage from "./Tabs/DocumentTrackingPage";
+import EthiopianDatePicker from "./Tabs/Dateddf";
 
 interface EmployeeLeave {
-  leave: LeaveInfo
+  leave: LeaveInfo;
 }
 interface ProfileParams {
   id: string;
@@ -31,7 +33,7 @@ const EmployeeDetailedProfilePage = () => {
   const { id } = useParams() as unknown as ProfileParams;
   const { data: selectedEmployee, error, isLoading } = useFindEmployeeById(id);
   // const employee = selectedEmployee.find((employee) => employee.key === id);
- const employeeLeave = selectedEmployee;
+  const employeeLeave = selectedEmployee;
   if (!selectedEmployee) {
     return <div>Employee not found</div>;
   }
@@ -131,13 +133,23 @@ const EmployeeDetailedProfilePage = () => {
                 Discipline
               </NavLink>
             </Item>
+            <Item key="documentTracking">
+              <NavLink
+                className="link"
+                to={`/employee/view/${id}/documentTracking`}
+                style={{ color: "grey", padding: "0 10px" }}
+              >
+                Document
+              </NavLink>
+            </Item>
+
             <Item key="health">
               <NavLink
                 className="link"
                 to={`/employee/view/${id}/health`}
                 style={{ color: "grey", padding: "0 10px" }}
               >
-                health
+                Health
               </NavLink>
             </Item>
           </Menu>
@@ -210,6 +222,13 @@ const EmployeeDetailedProfilePage = () => {
               path="/health"
               element={<HealthTab selectedEmployee={selectedEmployee} />}
             />
+            <Route
+              path="/documentTracking"
+              element={
+                <DocumentTrackingPage selectedEmpId={selectedEmployee.empId} />
+              }
+            />
+            {/* <Route path="/cal" element={<EthiopianDatePicker />} /> */}
           </Routes>
         </Content>
       </div>
