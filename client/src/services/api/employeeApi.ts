@@ -135,7 +135,7 @@ export const deactivateEmployee = async (data: {id: string, status: string, reas
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data.reason),
+      body: JSON.stringify(data),
     });
   } catch (error) {
     handleError(error);

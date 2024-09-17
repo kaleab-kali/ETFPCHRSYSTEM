@@ -320,7 +320,7 @@ const correctedDate = date.clone().add(1, "day");
         </Col>
         <Col span={8}>
           <Form.Item
-            label="employmentDate"
+            label={t('employmentDate')}
             name="employmentDate"
             rules={[
               { required: true, message: "Please select employment date" },
@@ -608,3 +608,5 @@ const correctedDate = date.clone().add(1, "day");
 };
 
 export default Step1;
+
+

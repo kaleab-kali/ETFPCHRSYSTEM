@@ -37,7 +37,7 @@ const resources = {
       lastName: "የአያት ስም",
       birthday: "ልደት",
       employmentDate: "የቅጥር ምዝገባ ቀን",
-      position: "ሰራተኛ የሥራ ቦታ",
+      position: "የሥራ መደብ",
       ethnicity: "ብሔረ",
       photo: "ፎቶ",
       gender: "ጾታ",

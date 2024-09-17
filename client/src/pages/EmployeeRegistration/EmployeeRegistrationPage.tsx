@@ -2,6 +2,8 @@ import React from "react";
 import EmployeeRegistrationForm from "../../components/EmployeeRegistration/EmployeeRegistrationForm";
 import Title from "antd/lib/typography/Title";
 import { Layout } from "antd";
+import RegistrationForm from "../../components/EmployeeRegistration/RegistrationForm";
+import EmployeeFirstRegistrationForm from "../../components/EmployeeRegistration/RegistrationForm";
  const { Content } = Layout;
 
 const EmployeeRegistrationPage = () => {
@@ -16,7 +18,8 @@ const EmployeeRegistrationPage = () => {
             className="site-layout-background"
             style={{ padding: "0 24px", minHeight: 360}}
           >
-            <EmployeeRegistrationForm />
+            <EmployeeFirstRegistrationForm />
+            {/* <EmployeeRegistrationForm /> */}
           </div>
         </Content>
       </Layout>

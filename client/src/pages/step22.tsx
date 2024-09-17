@@ -153,9 +153,9 @@ const Step2: React.FC<Step2Props> = ({ profileData, onChange }) => {
                     >
                       <Select
                         options={[
-                          { label: "Institution 1", value: "Institution 1" },
-                          { label: "Institution 2", value: "Institution 2" },
-                          { label: "Institution 3", value: "Institution 3" },
+                          { label: "AAU", value: "AAU" },
+                          { label: "AASTU", value: "AASTU" },
+                          { label: "Admas University", value: "admas" },
                         ]}
                       />
                     </Form.Item>

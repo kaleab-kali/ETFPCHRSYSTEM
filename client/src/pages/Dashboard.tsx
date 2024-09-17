@@ -253,7 +253,8 @@ const Dashboard: React.FC = () => {
                   path="registration"
                   element={
                     <ProtectedRoute roles={["hrmanager", "staff"]}>
-                      <EmployeeForm />
+                      <EmployeeRegistrationPage />
+                      {/* <EmployeeForm /> */}
                     </ProtectedRoute>
                   }
                 />
